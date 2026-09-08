@@ -4,9 +4,9 @@ Projeto da cadeira Desenvolvimento de Software do CIn - UFPE
 
 Participantes:
 
-Mateus Henrique: mhcc@cin.ufpe.br 
+Mateus Henrique Crêspo de Carvalho: mhcc@cin.ufpe.br 
 
-Gabriel Bueno: gsb2@cin.ufpe.br
+Gabriel dos Santos Bueno: gsb2@cin.ufpe.br
 
 Kauan Gabriel de Oliveira: kgo@cin.ufpe.br
 
