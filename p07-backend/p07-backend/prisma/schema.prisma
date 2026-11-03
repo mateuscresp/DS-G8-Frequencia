@@ -1,0 +1,244 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// ENUMERATIONS & LOOKUP TABLES
+// ============================================================================
+
+model UserRole {
+  id       Int      @id @default(autoincrement())
+  code     String   @unique
+  label    String
+  users    User[]
+
+  @@map("user_roles")
+}
+
+model CallStatus {
+  id     Int      @id @default(autoincrement())
+  code   String   @unique
+  label  String
+  calls  Call[]
+
+  @@map("call_statuses")
+}
+
+model AttendanceStatus {
+  id         Int         @id @default(autoincrement())
+  code       String      @unique
+  label      String
+  attendances Attendance[]
+
+  @@map("attendance_statuses")
+}
+
+// ============================================================================
+// USER & ACADEMIC STRUCTURE
+// ============================================================================
+
+model User {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  keycloakId    String   @unique
+  username      String   @unique
+  email         String?
+  roleId        Int
+  role          UserRole @relation(fields: [roleId], references: [id])
+
+  // Relations
+  asTeacher     Teacher?
+  asStudent     Student?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([keycloakId])
+  @@index([roleId])
+  @@map("users")
+}
+
+model Teacher {
+  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String @unique @db.Uuid
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Teacher can manage multiple classes
+  classes   ClassTeacher[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("teachers")
+}
+
+model Student {
+  id            String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String @unique @db.Uuid
+  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  studentNumber String? @unique
+
+  // Student enrollments and attendance
+  enrollments   Enrollment[]
+  attendances   Attendance[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+  @@map("students")
+}
+
+// ============================================================================
+// ACADEMIC CLASSES
+// ============================================================================
+
+model Class {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code        String   @unique
+  name        String
+  description String?
+
+  // Academic period info
+  semester    String?  // e.g., "2024.1"
+  year        Int?
+
+  teachers    ClassTeacher[]
+  enrollments Enrollment[]
+  calls       Call[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([semester])
+  @@map("classes")
+}
+
+model ClassTeacher {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  classId   String   @db.Uuid
+  teacherId String   @db.Uuid
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teacher   Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([classId, teacherId])
+  @@index([classId])
+  @@index([teacherId])
+  @@map("class_teachers")
+}
+
+model Enrollment {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  classId   String   @db.Uuid
+  studentId String   @db.Uuid
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([classId, studentId])
+  @@index([classId])
+  @@index([studentId])
+  @@map("enrollments")
+}
+
+// ============================================================================
+// ATTENDANCE TRACKING
+// ============================================================================
+
+model Call {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  classId     String   @db.Uuid
+  class       Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  // Call metadata
+  openedAt    DateTime
+  closedAt    DateTime?
+  statusId    Int
+  status      CallStatus @relation(fields: [statusId], references: [id])
+
+  // Attendance tokens for this call
+  tokens      AttendanceToken[]
+  attendances Attendance[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([classId])
+  @@index([statusId])
+  @@index([openedAt])
+  @@map("calls")
+}
+
+model AttendanceToken {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  callId    String   @db.Uuid
+  call      Call     @relation(fields: [callId], references: [id], onDelete: Cascade)
+
+  token     String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([callId])
+  @@index([expiresAt])
+  @@map("attendance_tokens")
+}
+
+model Attendance {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  callId     String   @db.Uuid
+  studentId  String   @db.Uuid
+  call       Call     @relation(fields: [callId], references: [id], onDelete: Cascade)
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  // Attendance status
+  statusId   Int
+  status     AttendanceStatus @relation(fields: [statusId], references: [id])
+
+  // For manual corrections
+  markedBy   String?  @db.Uuid // User ID who manually marked this
+  markedAt   DateTime?
+  notes      String?
+
+  registeredAt DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([callId, studentId])
+  @@index([callId])
+  @@index([studentId])
+  @@index([statusId])
+  @@map("attendances")
+}
+
+// ============================================================================
+// AUDIT TRAIL
+// ============================================================================
+
+model AuditLog {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  action    String   // e.g., "ATTENDANCE_MARKED_MANUAL", "CALL_OPENED", etc.
+  entity    String   // e.g., "Attendance", "Call"
+  entityId  String   @db.Uuid
+  userId    String   @db.Uuid // Who performed the action
+
+  oldValues Json?    // Previous values for updates
+  newValues Json?    // New values for updates
+
+  createdAt DateTime @default(now())
+
+  @@index([action])
+  @@index([entityId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
