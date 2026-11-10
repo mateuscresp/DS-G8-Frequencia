@@ -106,3 +106,22 @@ dialog::backdrop { background: var(--navy); }
   .top > span { font-size: 11px; gap: 3px; }
   .role-switch button { padding: 7px; }
 }
+
+.attendance-history { margin-bottom: 18px; }
+.columns + .attendance-history { margin-top: 18px; }
+.metrics { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+.metrics > div { flex: 1 1 110px; padding: 12px; background: #f0f6ff; border-radius: 10px; }
+.metrics dt { font-size: 12px; color: var(--muted); }
+.metrics dd { margin: 4px 0 0; font-size: 26px; font-weight: 800; color: var(--blue); }
+.badge { display: inline-block; padding: 5px 9px; border-radius: 7px; font-size: 12px; background: #edf2fa; }
+.badge.presente { color: #135b43; background: #e9faf2; }
+.badge.ausente { color: #922432; background: #fff1f2; }
+.empty { color: var(--muted); padding: 20px 0 4px; }
+.login { max-width: 500px; margin: 12vh auto; }
+.login .primary { margin-top: 20px; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 480px) {
+  .top { flex-direction: column; align-items: stretch; }
+  .role-switch { justify-content: space-between; }
+  .role-switch button { font-size: 12px; }
+}
