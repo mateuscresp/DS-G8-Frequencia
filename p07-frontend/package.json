@@ -8,8 +8,9 @@
     "test": "vitest run tests/v2",
     "test:v1": "vitest run tests/v1-llm",
     "test:v2": "vitest run tests/v2",
-    "test:coverage:v1": "vitest run tests/v1-llm --coverage --coverage.reportsDirectory=../docs/testes/relatorios/v1",
-    "test:coverage:v2": "vitest run tests/v2 --coverage --coverage.reportsDirectory=../docs/testes/relatorios/v2"
+    "test:coverage:v1": "vitest run tests/v1-llm --coverage --coverage.reportsDirectory=coverage/v1",
+    "test:coverage:v2": "vitest run tests/v2 --coverage --coverage.reportsDirectory=coverage/v2",
+    "check": "tsc --noEmit -p tsconfig.test.json"
   },
   "type": "module",
   "dependencies": {
@@ -23,6 +24,7 @@
     "react-router-dom": "^7.18.5"
   },
   "devDependencies": {
+    "@types/node": "22.20.5",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^5.2.0",

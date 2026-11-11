@@ -27,3 +27,7 @@ Resultado da v1: 44 testes gerados, 44 passaram, 0 falharam, 0 erros de compila�
 Resposta integral adicional: `respostas/v2-resposta-integral.ts.txt`. A v2 também contém uma cópia exata dos testes da v1; os seis testes novos estão em `tests/v2/gaps.test.ts` (um parametrizado em dois casos). Revisão feita pelo assistente contra os critérios documentados; revisão humana ainda pendente.
 
 Resultado da v2 antes das refatorações: 50 testes passaram, 0 falharam, 0 erros de compilação/carregamento; linhas 100%, branches 100%. Os 6 casos adicionados cobrem 5 partições ausentes na v1 (CT31 executa duas variantes). Relatórios v1/v2 foram produzidos no mesmo código de produção, com a mesma ferramenta e escopo.
+
+## Verificação adicional de tipos
+
+Após as três refatorações foi acrescentado `npm run check`, cobrindo app, testes e configuração. A primeira tentativa falhou porque a dependência de tipos Node não estava declarada (`TS2688`), não por um teste que deixou de carregar no Vitest. A saída foi preservada em `relatorios/typecheck-tentativa-1.txt`. Adicionou-se `@types/node` como dependência de desenvolvimento; a segunda execução passou (`typecheck-final.txt`). Não houve edição da v1 nem alteração dos seus oráculos. O build também passou; cobertura final pós-refatoração está em `docs/qualidade/evidencias/`.
