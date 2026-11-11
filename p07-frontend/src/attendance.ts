@@ -1,3 +1,5 @@
+import { MIN_CALL_MINUTES, MAX_CALL_MINUTES, CODE_BYTE_LENGTH, MILLISECONDS_PER_SECOND, SECONDS_PER_MINUTE, MILLISECONDS_PER_MINUTE } from './modules/attendance/domain/constants'
+
 export type Status = 'presente' | 'ausente'
 export type Student = { id: string; name: string; number?: string }
 export type Class = {
@@ -48,14 +50,14 @@ export function updateCalls(change: (calls: Call[]) => Call[]) {
 }
 
 export function openCall(calls: Call[], classId: string, minutes: number): Call[] {
-  if (!Number.isInteger(minutes) || minutes < 1 || minutes > 120) throw new Error('Informe uma duração de 1 a 120 minutos.')
+  if (!Number.isInteger(minutes) || minutes < MIN_CALL_MINUTES || minutes > MAX_CALL_MINUTES) throw new Error('Informe uma duração de 1 a 120 minutos.')
   if (calls.some(call => call.classId === classId && !call.closedAt)) throw new Error('Encerre a chamada anterior antes de abrir outra para esta turma.')
   const now = Date.now()
   let code: string
   do {
-    code = Array.from(crypto.getRandomValues(new Uint8Array(3)), byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase()
+    code = Array.from(crypto.getRandomValues(new Uint8Array(CODE_BYTE_LENGTH)), byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase()
   } while (calls.some(call => call.code === code))
-  return [{ id: crypto.randomUUID(), classId, code, openedAt: now, expiresAt: now + minutes * 60_000, records: {} }, ...calls]
+  return [{ id: crypto.randomUUID(), classId, code, openedAt: now, expiresAt: now + minutes * MILLISECONDS_PER_MINUTE, records: {} }, ...calls]
 }
 
 export function register(calls: Call[], code: string, studentId: string): Call[] {
@@ -72,6 +74,6 @@ export function register(calls: Call[], code: string, studentId: string): Call[]
 }
 
 export function timeLeft(expiresAt: number, now: number) {
-  const seconds = Math.max(0, Math.ceil((expiresAt - now) / 1000))
-  return [Math.floor(seconds / 60), seconds % 60].map(part => String(part).padStart(2, '0')).join(':')
+  const seconds = Math.max(0, Math.ceil((expiresAt - now) / MILLISECONDS_PER_SECOND))
+  return [Math.floor(seconds / SECONDS_PER_MINUTE), seconds % SECONDS_PER_MINUTE].map(part => String(part).padStart(2, '0')).join(':')
 }
