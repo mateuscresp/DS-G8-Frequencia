@@ -4,7 +4,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run tests/v2",
+    "test:v1": "vitest run tests/v1-llm",
+    "test:v2": "vitest run tests/v2",
+    "test:coverage:v1": "vitest run tests/v1-llm --coverage --coverage.reportsDirectory=../docs/testes/relatorios/v1",
+    "test:coverage:v2": "vitest run tests/v2 --coverage --coverage.reportsDirectory=../docs/testes/relatorios/v2"
   },
   "type": "module",
   "dependencies": {
@@ -21,8 +26,10 @@
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^5.2.0",
+    "@vitest/coverage-v8": "3.2.4",
     "typescript": "~5.9.3",
-    "vite": "^7.3.8"
+    "vite": "^7.3.8",
+    "vitest": "3.2.4"
   },
   "private": true
 }
