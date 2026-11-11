@@ -1,27 +1,26 @@
-import { useState } from 'react'
 import { CalendarCheck } from 'lucide-react'
 import type { Call, Class } from '../../attendance'
 
-const dateTime = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'short', timeZone: 'America/Recife' })
+import { dateTime } from '../../utils/format'
+import { attendanceSummary } from './summary'
 
-export default function StudentHistory({ calls, classes, studentId }: { calls: Call[]; classes: Class[]; studentId: string }) {
-  const [selected, setSelected] = useState('')
+export default function StudentHistory({ calls, classes, studentId, selected, onSelect }: { calls: Call[]; classes: Class[]; studentId: string; selected: string; onSelect: (id: string) => void }) {
   const visible = calls.filter(call => classes.some(group => group.id === call.classId) && (!selected || call.classId === selected))
-  const finished = visible.filter(call => call.closedAt)
-  const present = finished.filter(call => call.records[studentId] === 'presente').length
-  const percentage = finished.length ? Math.round(present / finished.length * 100) + '%' : '—'
+  const summary = attendanceSummary(visible, studentId)
+  const { present, absent } = summary
+  const percentage = summary.percentage === null ? '—' : summary.percentage + '%'
 
   return <section id="frequencia" className="card attendance-history">
     <h2 className="card-title"><span className="icon-box"><CalendarCheck size={21} /></span>Minha frequência</h2>
     <p className="muted">A frequência considera as chamadas encerradas.</p>
-    <label className="history">Filtrar por turma<select value={selected} onChange={event => setSelected(event.target.value)}>
+    <label className="history">Filtrar por turma<select value={selected} onChange={event => onSelect(event.target.value)}>
       <option value="">Todas as minhas turmas</option>
       {classes.map(group => <option key={group.id} value={group.id}>{group.name}</option>)}
     </select></label>
     <dl className="metrics">
       <div><dt>Frequência</dt><dd>{percentage}</dd></div>
       <div><dt>Presenças</dt><dd>{present}</dd></div>
-      <div><dt>Faltas</dt><dd>{finished.length - present}</dd></div>
+      <div><dt>Faltas</dt><dd>{absent}</dd></div>
     </dl>
     {visible.length ? <div className="table-wrap"><table>
       <thead><tr><th scope="col">Turma / aula</th><th scope="col">Situação</th></tr></thead>
