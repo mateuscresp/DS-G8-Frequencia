@@ -1,4 +1,4 @@
-import type { Call } from '../../attendance'
+import type { Call } from './domain/types'
 export function attendanceSummary(calls: Call[], studentId: string) {
  const finished = calls.filter(call => call.closedAt)
  const present = finished.filter(call => call.records[studentId] === 'presente').length
