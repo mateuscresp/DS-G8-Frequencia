@@ -16,8 +16,11 @@ $initial = Get-Location
 try {
     Set-Location -LiteralPath $Projeto
     foreach ($command in @('git', 'node', 'npm.cmd')) { $null = Get-Command $command -ErrorAction Stop }
-    $nodeMajor = [int](& node -p 'process.versions.node.split(".")[0]')
-    $nodeMinor = [int](& node -p 'process.versions.node.split(".")[1]')
+    $nodeVersion = & node -p 'process.versions.node'
+    if ($LASTEXITCODE -ne 0) { throw 'Nao foi possivel verificar a versao do Node.' }
+    $nodeParts = $nodeVersion.Split('.')
+    $nodeMajor = [int]$nodeParts[0]
+    $nodeMinor = [int]$nodeParts[1]
     if (($nodeMajor -lt 22) -or (($nodeMajor -eq 22) -and ($nodeMinor -lt 12))) {
         throw 'Use Node 24 LTS ou Node 22.12+ antes de aplicar.'
     }
