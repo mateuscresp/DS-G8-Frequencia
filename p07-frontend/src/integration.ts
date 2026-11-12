@@ -1,34 +1,21 @@
-import type { Class, Student } from './attendance'
+import type { Call, Class, Status, Student } from './attendance'
 import { API_URL, fetchApi, getApiErrorMessage } from './services/api'
 export { demo } from './config/env'
 
-type User = { keycloakId: string; username: string }
-type ApiClass = {
-  id: string
-  name: string
-  code: string
-  semester: string | null
-  teachers: { teacher: { user: User } }[]
-}
-type Enrollment = { student: { id: string; studentNumber: string | null; user: User } }
-
-async function request<T>(path: string, signal: AbortSignal): Promise<T> {
-  const response = await fetchApi(API_URL + path, { signal })
-  if (!response.ok) throw new Error(await getApiErrorMessage(response, 'Não foi possível consultar os dados.'))
+async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const response = await fetchApi(API_URL + path, init)
+  if (!response.ok) throw new Error(await getApiErrorMessage(response, 'Não foi possível concluir a operação.'))
   const body = await response.json() as { success: boolean; data: T }
-  if (!body.success || body.data == null) throw new Error('A API retornou uma resposta inesperada.')
+  if (body.success !== true || body.data == null) throw new Error('A API retornou uma resposta inesperada.')
   return body.data
 }
-
-export async function loadTeacherClasses(subject: string, signal: AbortSignal): Promise<Class[]> {
-  const classes = await request<ApiClass[]>('/classes', signal)
-  return classes.filter(group => group.teachers.some(link => link.teacher.user.keycloakId === subject))
-    .map(group => ({ id: group.id, name: group.name, code: group.code, semester: group.semester ?? undefined }))
+function json(method: string, body?: object): RequestInit {
+  return { method, ...(body ? { headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) } : {}) }
 }
-
-export async function loadStudents(classId: string, signal: AbortSignal): Promise<Student[]> {
-  const enrollments = await request<Enrollment[]>('/classes/' + encodeURIComponent(classId) + '/students', signal)
-  return enrollments.map(({ student }) => ({
-    id: student.id, name: student.user.username, number: student.studentNumber ?? undefined,
-  }))
-}
+export const loadClasses = (signal: AbortSignal) => request<Class[]>('/classes', { signal })
+export const loadStudents = (id: string, signal: AbortSignal) => request<Student[]>('/classes/' + encodeURIComponent(id) + '/students', { signal })
+export const loadCalls = (signal: AbortSignal) => request<Call[]>('/calls', { signal })
+export const createCall = (id: string, minutes: number) => request<Call>('/classes/' + encodeURIComponent(id) + '/calls', json('POST', { minutes }))
+export const submitPresence = (code: string) => request<Call>('/attendance', json('POST', { code }))
+export const closeCall = (id: string) => request<Call>('/calls/' + encodeURIComponent(id) + '/close', json('POST'))
+export const correctPresence = (id: string, studentId: string, status: Status) => request<Call>('/calls/' + encodeURIComponent(id) + '/attendance/' + encodeURIComponent(studentId), json('PATCH', { status }))

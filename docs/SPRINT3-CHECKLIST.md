@@ -1,5 +1,7 @@
 # Sprint 3 - conferência de entrega
 
+> Atualização de 12/11/2026: este documento registra a etapa anterior, restrita ao frontend. A integração autorizada com o backend, os testes adicionais e as pendências atuais estão em [docs/integracao/README.md](integracao/README.md). As evidências históricas abaixo foram preservadas.
+
 Base: frontend com refatoração visual já aplicada. Trabalho novo restrito a `p07-frontend/` e documentos novos em `docs/`. **Zero mudanças em `p07-backend/`, contratos da API, migrations, Docker ou configuração compartilhada de autenticação.** A entrega é importada em branch separada; não faz push nem merge automaticamente. O backend de outro integrante pode evoluir em sua própria branch.
 
 ## Materiais técnicos preparados

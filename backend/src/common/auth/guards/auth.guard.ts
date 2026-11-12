@@ -1,4 +1,3 @@
-import { PUBLIC_KEY } from '@/common/decorators/public.decorator';
 import {
   type CanActivate,
   type ExecutionContext,
@@ -8,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
+import { PUBLIC_KEY } from '../../decorators/public.decorator';
 import type { CurrentUser } from '../current-user.interface';
 import { IDENTITY_SOURCE, type IdentitySource } from '../identity/identity-source.interface';
 

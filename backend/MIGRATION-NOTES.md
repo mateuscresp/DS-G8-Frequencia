@@ -1,43 +1,19 @@
-# Notas da preparação do P07
+# Banco e identidade — integração de 12/11/2026
 
-## Alterações de identidade e banco
+O schema utiliza Teacher.keycloakId e Student.keycloakId como identificadores externos do Keycloak, sem modelo local de credenciais.
 
-O schema Prisma agora usa `Teacher.keycloakId` e `Student.keycloakId` como identificadores externos, sem o modelo local `User`/`UserRole`. As relações de turmas, matrículas e frequências foram ajustadas para usar esses identificadores string.
+## Banco novo
 
-A pasta `prisma/migrations` original foi preservada. **Não aplique o schema novo em um banco que contenha dados importantes sem criar e revisar uma migration de transição.** A migration inicial existente ainda representa o schema antigo. Em ambiente local descartável, faça backup se necessário e gere uma nova migration conforme o fluxo do projeto; não apague migrations já aplicadas em ambientes compartilhados.
+As migrations agora versionadas são `202611120001_initial` (schema atual) e `202611120002_one_open_call` (uma chamada aberta por turma). Com DATABASE_URL apontando para um banco vazio: `npm run prisma:generate`, `npm run migration:run`, `npm run db:seed`.
 
-O seed semeia os status `PRESENT`, `ABSENT` e `MANUAL`. O status `JUSTIFIED` foi removido para manter os dados de referência alinhados aos status definidos pela regra de negócio atual do P07.
+## Banco já existente
 
-## Keycloak
+Não execute automaticamente a migration inicial em banco populado. Faça backup e compare o schema e a tabela `_prisma_migrations` com a equipe. Um banco do modelo antigo com User/UserRole exige migration de transição e mapeamento dos IDs ao Keycloak. Um banco já criado com o schema atual exige baseline validado antes do deploy. Não use reset nem marque migration como aplicada sem verificar equivalência.
 
-O `.env` foi alinhado ao compose do P07 (Keycloak 25 sem `--http-relative-path=/auth`) e usa:
-- Realm: `p07-frequencia`
-- Client: `p07-back`
-- Roles esperadas: `p07-admin`, `p07-professor`, `p07-student`
+O índice parcial também exige resolver chamadas abertas duplicadas antes de aplicá-lo; não remove dados automaticamente. As migrations foram validadas somente em banco novo descartável.
 
-Esses nomes precisam existir no realm/client real do Keycloak. O compose original do P07 não importa automaticamente um realm; configure-o no Keycloak antes de testar endpoints protegidos.
+## Autenticação
 
-## Docker
+Realm sugerido `p07-frequencia`; cliente público frontend `p07-front`; audience esperada na API `p07-back`; roles `p07-admin`, `p07-professor`, `p07-student`. O compose não provisiona realm, usuários, mapper de audience ou matrículas. O seed cria status de referência. Não há login próprio.
 
-O Dockerfile foi trazido do SooBackend. O `.dockerignore` evita copiar dependências locais, builds e `.env` para o contexto da imagem.
-
-## Dependências e primeira preparação
-
-O `package.json` foi atualizado para remover Passport/JWT e incluir `helmet` e `@nestjs/throttler`, mantendo a linha NestJS 10 já usada pelo P07. O ambiente de execução desta preparação estava sem acesso ao npm registry; portanto, o `package-lock.json` original foi preservado e precisa ser sincronizado localmente antes de usar `npm ci`/Docker:
-
-```bash
-npm install
-npx prisma generate
-```
-
-Depois disso, valide o schema e crie/revise a migration antes de aplicar em um banco.
-
-
-## Correções desta revisão (v2)
-
-- `prisma/seed.mjs`: removido `JUSTIFIED` e incluído `MANUAL`.
-- `src/app.module.ts`: registrado `ThrottlerModule` com limite global padrão de 100 requisições por 60 segundos e `ThrottlerGuard` como `APP_GUARD`.
-- Versionamento URI (`/v1`) não foi adicionado: o contrato atual do P07 define rotas sem esse prefixo.
-- `ClassesController` e `ClassesService` ainda precisam da implementação de autenticação/autorização por papel e proteção contra IDOR. Não foram inventadas regras de acesso sem validar a especificação funcional.
-- A migration antiga foi preservada. Antes de qualquer reset ou remoção, verifique o estado do banco com `npx prisma migrate status`. Não use `migrate reset` em banco com dados que devam ser preservados.
-- `package-lock.json` ainda precisa ser sincronizado no ambiente com acesso ao npm registry: execute `npm install` na raiz antes de `npm ci` ou do build Docker.
+Consulte `docs/integracao/README.md` para contrato, execução, testes e limitações.

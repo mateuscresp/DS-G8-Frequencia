@@ -1,5 +1,7 @@
 # Manual do desenvolvedor — Frequência UFPE
 
+> Atualização de 12/11/2026: este documento registra a etapa anterior, restrita ao frontend. A integração autorizada com o backend, os testes adicionais e as pendências atuais estão em [docs/integracao/README.md](integracao/README.md). As evidências históricas abaixo foram preservadas.
+
 ## Escopo e execução
 
 Frontend React 18 + TypeScript + Vite 7, React Router, Lucide, Poppins e Roboto locais. Use Node.js 22.12+ e npm. Em `p07-frontend`, execute `npm ci`, `npm run dev`; para produção, `npm run build`. O modo padrão é demonstração, com dados fictícios. Rotas: `/aluno`, `/professor`, `/admin`. O seletor de perfis só existe na demonstração. Nenhum teste desta entrega depende de banco ou Keycloak.

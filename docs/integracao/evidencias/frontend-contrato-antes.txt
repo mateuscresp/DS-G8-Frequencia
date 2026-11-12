@@ -1,0 +1,93 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+ RUN  v3.2.4 /workspace/scratch/23694bc7de94/integracao
+
+ ❯ p07-frontend/tests/integration/api.test.ts (8 tests | 8 failed) 15ms
+   × usa DTO de turmas sem depender de teacher.user 10ms
+     → loadClasses is not a function
+   × usa keycloakId normalizado no DTO dos alunos 2ms
+     → Cannot read properties of undefined (reading 'id')
+   × consulta somente chamadas visíveis ao usuário autenticado 0ms
+     → loadCalls is not a function
+   × abre com duração e codifica id no caminho 0ms
+     → createCall is not a function
+   × não envia id de aluno no registro 0ms
+     → submitPresence is not a function
+   × encerra e corrige pelos endpoints correspondentes 0ms
+     → closeCall is not a function
+   × propaga mensagem de erro da API 0ms
+     → submitPresence is not a function
+   × recusa envelope inesperado 0ms
+     → loadClasses is not a function
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  p07-frontend/tests/integration/api.test.ts > usa DTO de turmas sem depender de teacher.user
+TypeError: loadClasses is not a function
+ ❯ p07-frontend/tests/integration/api.test.ts:7:128
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  p07-frontend/tests/integration/api.test.ts > usa keycloakId normalizado no DTO dos alunos
+TypeError: Cannot read properties of undefined (reading 'id')
+ ❯ p07-frontend/src/integration.ts:32:17
+     30|   const enrollments = await request<Enrollment[]>('/classes/' + encode…
+     31|   return enrollments.map(({ student }) => ({
+     32|     id: student.id, name: student.user.username, number: student.stude…
+       |                 ^
+     33|   }))
+     34| }
+ ❯ Module.loadStudents p07-frontend/src/integration.ts:31:22
+ ❯ p07-frontend/tests/integration/api.test.ts:8:127
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  p07-frontend/tests/integration/api.test.ts > consulta somente chamadas visíveis ao usuário autenticado
+TypeError: loadCalls is not a function
+ ❯ p07-frontend/tests/integration/api.test.ts:9:103
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  p07-frontend/tests/integration/api.test.ts > abre com duração e codifica id no caminho
+TypeError: createCall is not a function
+ ❯ p07-frontend/tests/integration/api.test.ts:10:89
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  p07-frontend/tests/integration/api.test.ts > não envia id de aluno no registro
+TypeError: submitPresence is not a function
+ ❯ p07-frontend/tests/integration/api.test.ts:11:81
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  p07-frontend/tests/integration/api.test.ts > encerra e corrige pelos endpoints correspondentes
+TypeError: closeCall is not a function
+ ❯ p07-frontend/tests/integration/api.test.ts:12:97
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  p07-frontend/tests/integration/api.test.ts > propaga mensagem de erro da API
+TypeError: submitPresence is not a function
+ ❯ p07-frontend/tests/integration/api.test.ts:13:177
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  p07-frontend/tests/integration/api.test.ts > recusa envelope inesperado
+TypeError: loadClasses is not a function
+ ❯ p07-frontend/tests/integration/api.test.ts:14:120
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 failed (8)
+   Start at  08:44:10
+   Duration  433ms (transform 87ms, setup 0ms, collect 88ms, tests 15ms, environment 0ms, prepare 82ms)
+

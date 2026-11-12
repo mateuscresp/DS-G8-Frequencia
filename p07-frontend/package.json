@@ -5,7 +5,7 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "vitest run tests/v2",
+    "test": "vitest run tests/v2 tests/integration",
     "test:v1": "vitest run tests/v1-llm",
     "test:v2": "vitest run tests/v2",
     "test:coverage:v1": "vitest run tests/v1-llm --coverage --coverage.reportsDirectory=coverage/v1",

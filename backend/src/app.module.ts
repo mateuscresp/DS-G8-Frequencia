@@ -9,6 +9,8 @@ import { validateEnv } from './config/env.validation';
 import keycloakConfig from './config/keycloak.config';
 import swaggerConfig from './config/swagger.config';
 import { PrismaModule } from './database/prisma.module';
+import { AttendanceModule } from './modules/attendance/attendance.module';
+import { ClassesModule } from './modules/classes/classes.module';
 import { HealthModule } from './modules/health/health.module';
 
 @Module({
@@ -23,6 +25,8 @@ import { HealthModule } from './modules/health/health.module';
     PrismaModule,
     AuthModule,
     HealthModule,
+    ClassesModule,
+    AttendanceModule,
   ],
   providers: [
     {

@@ -1,5 +1,7 @@
 # Dívida técnica inicial e plano de pagamento
 
+> Atualização de 12/11/2026: este documento registra a etapa anterior, restrita ao frontend. A integração autorizada com o backend, os testes adicionais e as pendências atuais estão em [docs/integracao/README.md](../integracao/README.md). As evidências históricas abaixo foram preservadas.
+
 Escopo: frontend em modo demonstração, leitura do código em 11/11/2026. Procedimento de identificação documentado em `log-analise.md`. A confirmação dos itens pelos integrantes e a atribuição de responsáveis fazem parte da revisão da entrega. Estimativas representam esforço proposto, não horas já realizadas.
 
 | ID | Local | Problema e categoria | Consequência concreta | Evidência / descoberta | Prioridade, plano e estimativa | Status |

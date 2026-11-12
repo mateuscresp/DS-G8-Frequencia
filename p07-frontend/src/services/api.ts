@@ -138,7 +138,7 @@ export const getApiErrorMessage = async (
 ): Promise<string> => {
   try {
     const data = await response.clone().json();
-    const msg = data?.message ?? data?.error;
+    const msg = data?.detail ?? data?.message ?? data?.error;
     if (Array.isArray(msg)) return msg.filter(Boolean).join(', ');
     if (typeof msg === 'string' && msg.trim()) return msg;
   } catch {

@@ -1,8 +1,8 @@
-import { AccessDeniedException } from '@/common/exceptions/access-denied.exception';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Request } from 'express';
 import { type JWTPayload, createRemoteJWKSet, jwtVerify } from 'jose';
+import { AccessDeniedException } from '../../exceptions/access-denied.exception';
 import { AccessRole } from '../access-role.enum';
 import type { CurrentUser } from '../current-user.interface';
 import type { IdentitySource } from './identity-source.interface';
@@ -97,6 +97,8 @@ export class KeycloakIdentitySource implements IdentitySource {
     if (!this.hasValidAudience(payload)) {
       throw new AccessDeniedException('Token emitido para outro cliente.');
     }
+
+    if (!payload.sub) throw new UnauthorizedException('Token sem identificador de usuário.');
 
     const role = this.resolveRole(payload);
 
