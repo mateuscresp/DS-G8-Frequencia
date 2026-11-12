@@ -1,7 +1,7 @@
-import helmet from 'helmet';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
@@ -20,7 +20,10 @@ async function bootstrap() {
   const corsOrigins = configService.get<string>('CORS_ORIGINS', '');
   if (corsOrigins) {
     app.enableCors({
-      origin: corsOrigins.split(',').map((origin) => origin.trim()).filter(Boolean),
+      origin: corsOrigins
+        .split(',')
+        .map((origin) => origin.trim())
+        .filter(Boolean),
       credentials: true,
     });
   }

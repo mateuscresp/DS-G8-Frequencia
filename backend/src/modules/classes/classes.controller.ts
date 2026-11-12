@@ -1,7 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
-import { ClassesService } from './classes.service';
 import { Public } from '@/common/decorators/public.decorator';
+import { Controller, Get, Param } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ClassesService } from './classes.service';
 
 @ApiTags('Classes')
 @Controller('classes')

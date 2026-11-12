@@ -1,8 +1,8 @@
+import { AccessDeniedException } from '@/common/exceptions/access-denied.exception';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Request } from 'express';
-import { createRemoteJWKSet, type JWTPayload, jwtVerify } from 'jose';
-import { AccessDeniedException } from '@/common/exceptions/access-denied.exception';
+import { type JWTPayload, createRemoteJWKSet, jwtVerify } from 'jose';
 import { AccessRole } from '../access-role.enum';
 import type { CurrentUser } from '../current-user.interface';
 import type { IdentitySource } from './identity-source.interface';
@@ -60,15 +60,12 @@ export class KeycloakIdentitySource implements IdentitySource {
 
     const base = authServerUrl.replace(/\/+$/, '');
     this.issuer = `${base}/realms/${realm}`;
-    this.jwks = createRemoteJWKSet(
-      new URL(`${this.issuer}/protocol/openid-connect/certs`),
-      {
-        // Revalida periodicamente o key set (rotação de chaves do Keycloak).
-        cacheMaxAge: this.configService.get<number>('keycloak.jwksCacheMaxAge'),
-        // Falha rápido se o endpoint JWKS não responder, em vez de travar a requisição.
-        timeoutDuration: this.configService.get<number>('keycloak.jwksTimeout'),
-      },
-    );
+    this.jwks = createRemoteJWKSet(new URL(`${this.issuer}/protocol/openid-connect/certs`), {
+      // Revalida periodicamente o key set (rotação de chaves do Keycloak).
+      cacheMaxAge: this.configService.get<number>('keycloak.jwksCacheMaxAge'),
+      // Falha rápido se o endpoint JWKS não responder, em vez de travar a requisição.
+      timeoutDuration: this.configService.get<number>('keycloak.jwksTimeout'),
+    });
   }
 
   async extract(req: Request): Promise<CurrentUser | null> {

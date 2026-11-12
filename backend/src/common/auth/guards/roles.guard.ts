@@ -1,7 +1,7 @@
+import { AccessDeniedException } from '@/common/exceptions/access-denied.exception';
 import { type CanActivate, type ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
-import { AccessDeniedException } from '@/common/exceptions/access-denied.exception';
 import type { AccessRole } from '../access-role.enum';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 
