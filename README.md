@@ -3,17 +3,14 @@
   <img src="https://capsule-render.vercel.app/api?type=waving&height=130&color=0:FF8C00,100:FF6B35&v=99&version=3&cache=1" width="100%" />
 </p>
 
-<!-- Bloco das Imagens Lado a Lado -->
-<table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; border: none;">
-  <tr>
-    <td style="border: none; padding-right: 50px;">
-      <img src="./Assets/logo-cin.png" width="140" alt="CIn Logo" />
-    </td>
-    <td style="border: none;">
-      <img src="./Assets/CIn-UFPE.png" width="500" alt="CIn-UFPE Logo" />
-    </td>
-  </tr>
-</table>
+<!-- Logo (branca no tema escuro, escura no tema claro) -->
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./Assets/logo-cin-branco.png">
+    <source media="(prefers-color-scheme: light)" srcset="./Assets/logo-cin-escuro.png">
+    <img src="./Assets/logo-cin-escuro.png" width="320" alt="Centro de Informática - UFPE" />
+  </picture>
+</p>
 
 ---
 
