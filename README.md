@@ -361,23 +361,23 @@ Veja `backend/package.json` e `p07-frontend/package.json` para a lista completa.
         </a>
       </td>
       <td valign="middle" align="center" style="border: none; padding: 0 10px;">
-        <a href="https://github.com/USUARIO">
-          <img src="https://images.weserv.nl/?url=github.com/USUARIO.png&w=60&h=60&mask=circle" alt="USUARIO"><br><strong>Eugeni1</strong>
+        <a href="https://github.com/Eugeni1">
+          <img src="https://images.weserv.nl/?url=github.com/Eugeni1.png&w=60&h=60&mask=circle" alt="Eugeni1"><br><strong>Eugeni1</strong>
         </a>
       </td>
             <td valign="middle" align="center" style="border: none; padding: 0 10px;">
-        <a href="https://github.com/USUARIO">
-          <img src="https://images.weserv.nl/?url=github.com/USUARIO.png&w=60&h=60&mask=circle" alt="USUARIO"><br><strong>codigopratico</strong>
+        <a href="https://github.com/codigopratico">
+          <img src="https://images.weserv.nl/?url=github.com/codigopratico.png&w=60&h=60&mask=circle" alt="codigopratico"><br><strong>codigopratico</strong>
         </a>
       </td>
             <td valign="middle" align="center" style="border: none; padding: 0 10px;">
-        <a href="https://github.com/USUARIO">
-          <img src="https://images.weserv.nl/?url=github.com/USUARIO.png&w=60&h=60&mask=circle" alt="USUARIO"><br><strong>Guilhermerlemos</strong>
+        <a href="https://github.com/Guilhermerlemos">
+          <img src="https://images.weserv.nl/?url=github.com/Guilhermerlemos.png&w=60&h=60&mask=circle" alt="Guilhermerlemos"><br><strong>Guilhermerlemos</strong>
         </a>
       </td>
             <td valign="middle" align="center" style="border: none; padding: 0 10px;">
-        <a href="https://github.com/USUARIO">
-          <img src="https://images.weserv.nl/?url=github.com/USUARIO.png&w=60&h=60&mask=circle" alt="USUARIO"><br><strong>USUARIO</strong>
+        <a href="https://github.com/SANTOSBUENO-cpu">
+          <img src="https://images.weserv.nl/?url=github.com/SANTOSBUENO-cpu.png&w=60&h=60&mask=circle" alt="SANTOSBUENO-cpu"><br><strong>SANTOSBUENO-cpu</strong>
         </a>
       </td>
     </tr>
