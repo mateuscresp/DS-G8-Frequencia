@@ -41,15 +41,15 @@
 ---
 
 <a id="sobre"></a>
-## 📌 Sobre
+## Sobre
 
 Sistema de **Desenvolvimento de Software** do **Grupo 8** que implementa um **controle de frequência acadêmica** com três perfis de acesso:
 
 | Perfil | O que faz |
 |---|---|
-| 🧑‍🏫 **Professor** | **Abre uma chamada** para uma turma com validade de **1 a 120 minutos**, gerando um **código compartilhado** que pode ser **projetado em tela cheia**. Após o encerramento, pode **corrigir presença ou falta**. |
-| 🎓 **Aluno** | **Registra a presença digitando o código** dentro do prazo. Há **uma presença por aluno em cada chamada**. |
-| 🛠️ **Administrador** | Acesso administrativo ao sistema, com visão de todas as turmas. |
+| **Professor** | **Abre uma chamada** para uma turma com validade de **1 a 120 minutos**, gerando um **código compartilhado** que pode ser **projetado em tela cheia**. Após o encerramento, pode **corrigir presença ou falta**. |
+| **Aluno** | **Registra a presença digitando o código** dentro do prazo. Há **uma presença por aluno em cada chamada**. |
+| **Administrador** | Acesso administrativo ao sistema, com visão de todas as turmas. |
 
 A frequência do aluno é calculada **somente sobre chamadas encerradas**: sem registro, a chamada conta como falta; chamadas abertas aparecem como pendentes.
 
@@ -57,9 +57,9 @@ A solução é dividida em um **frontend** em **React + TypeScript + Vite** (`p0
 
 O frontend funciona em **modo demonstração** (dados fictícios, sem banco nem Keycloak) ou em **modo Keycloak** (API real), escolhido por configuração explícita.
 
-> 📦 **Entrega da Sprint 3:** suítes de teste (v1 e v2), matriz de rastreabilidade, **tabela de dívida técnica**, **três refatorações** com testes antes e depois, **manual do desenvolvedor** e a **integração frontend × backend** com evidências.
+>  **Entrega da Sprint 3:** suítes de teste (v1 e v2), matriz de rastreabilidade, **tabela de dívida técnica**, **três refatorações** com testes antes e depois, **manual do desenvolvedor** e a **integração frontend × backend** com evidências.
 
-### 🔄 Ciclo de uma chamada
+### Ciclo de uma chamada
 
 ```mermaid
 stateDiagram-v2
@@ -69,7 +69,7 @@ stateDiagram-v2
     Encerrada --> Encerrada: professor corrige presença ou falta
 ```
 
-### 🗺️ Visão geral
+### Visão geral
 
 ```mermaid
 flowchart LR
@@ -85,11 +85,11 @@ flowchart LR
 ---
 
 <a id="inicio-rapido"></a>
-## 🚀 Início rápido
+##  Início rápido
 
 > **Ambiente de execução:** **Node.js 22.12+** (validado em Node 24 LTS) e **npm**. O backend usa PostgreSQL e Keycloak, disponíveis via Docker Compose.
 
-### 📋 Pré-requisitos
+### Pré-requisitos
 
 | Ferramenta | Observação |
 |---|---|
@@ -98,14 +98,14 @@ flowchart LR
 | **npm** | Gerenciador de pacotes |
 | **Docker** e **Docker Compose** | PostgreSQL e Keycloak, apenas no modo integrado |
 
-### 1️⃣ Clone o repositório
+### 1️ª Clone o repositório
 
 ```bash
 git clone https://github.com/mateuscresp/DS-G8-Frequencia.git
 cd DS-G8-Frequencia
 ```
 
-### 2️⃣ Modo demonstração (mais rápido)
+### 2ª Modo demonstração (mais rápido)
 
 ```bash
 cd p07-frontend
@@ -117,7 +117,7 @@ Abra a URL exibida pelo Vite. Escolha **Professor**, selecione uma turma e gere 
 
 > 💡 A demonstração usa **dados fictícios** e sincroniza pelo armazenamento local do navegador. Sem `.env`, o modo padrão é `demo`.
 
-### 3️⃣ Modo integrado (API + Keycloak)
+### 3ª Modo integrado (API + Keycloak)
 
 <details>
 <summary><b>Ver passo a passo completo</b></summary>
@@ -133,7 +133,7 @@ docker compose up -d
 
 **3.2 Keycloak:** crie o realm `p07-frequencia`, os papéis `p07-admin`, `p07-professor` e `p07-student`, e um cliente público OIDC `p07-front` (Authorization Code + PKCE, com redirect URI e web origin do frontend). Configure o token para incluir `p07-back` em `aud`.
 
-> ⚠️ **Nunca coloque segredo de cliente em variáveis `VITE_*`.**
+>  **Nunca coloque segredo de cliente em variáveis `VITE_*`.**
 
 **3.3 Backend:**
 
@@ -159,7 +159,7 @@ npm run dev
 
 </details>
 
-### ⚙️ Variáveis de ambiente principais
+### Variáveis de ambiente principais
 
 | Local | Variável | Descrição |
 |---|---|---|
@@ -171,7 +171,7 @@ npm run dev
 | `p07-frontend/.env.local` | `VITE_API_URL`, `VITE_KEYCLOAK_JSON` | API e configuração pública do cliente OIDC |
 | `p07-frontend/.env.local` | `VITE_ROLE_ADMIN`, `VITE_ROLE_PROFESSOR`, `VITE_ROLE_ALUNO` | Nomes dos papéis |
 
-### 🐳 Docker (frontend)
+### Docker (frontend)
 
 ```bash
 cd p07-frontend
@@ -181,7 +181,7 @@ docker run --rm -p 8081:80 frequencia-front
 
 A imagem serve a demonstração em `http://localhost:8081`. Para o modo integrado, informe `VITE_APP_MODE`, `VITE_API_URL` e `VITE_KEYCLOAK_JSON` como argumentos de build.
 
-### ✅ Validação pós-execução
+### Validação pós-execução
 
 ```bash
 # Frontend
@@ -199,15 +199,15 @@ npm run lint:ci && npm test && npm run build
 npm run test:e2e
 ```
 
-> 🛑 **Nunca use um banco compartilhado.** A suíte cria fixtures próprias e as remove no final.
+ > **Nunca use um banco compartilhado.** A suíte cria fixtures próprias e as remove no final.
 
 ---
 
 <a id="arquitetura"></a>
-## 🏗️ Arquitetura
+##  Arquitetura
 
 <details>
-<summary><b>📂 Estrutura de pastas</b></summary>
+<summary><b> Estrutura de pastas</b></summary>
 
 ```text
 DS-G8-Frequencia/
@@ -258,28 +258,28 @@ DS-G8-Frequencia/
 
 </details>
 
-### 🧩 Principais responsabilidades
+### Principais responsabilidades
 
 | Camada | Arquivo / função | Responsabilidade |
 |---|---|---|
-| 🔐 Identidade | `common/auth/identity/keycloak.identity-source.ts` | Assinatura JWT/JWKS, issuer, audience/azp, subject e papel |
-| 🛡️ Autorização | `modules/classes/class-access.ts` | Restringe leitura e gestão por vínculo e papel |
-| ⚙️ Aplicação | `modules/attendance/attendance.service.ts` | `list`, `open`, `register`, `close`, `correct` |
-| 🎨 Apresentação | `modules/attendance/call-view.ts` | Normaliza datas e oculta código e registros de terceiros |
-| 🗄️ Persistência | Prisma + migrations | Integridade, transações e auditoria |
-| 🧭 Orquestração (front) | `hooks/useAttendance.ts` | Executa ações, evita duplo envio e descarta consultas antigas |
-| 🔗 Transporte (front) | `integration.ts` | Endpoints e envelope da API |
+| Identidade | `common/auth/identity/keycloak.identity-source.ts` | Assinatura JWT/JWKS, issuer, audience/azp, subject e papel |
+| Autorização | `modules/classes/class-access.ts` | Restringe leitura e gestão por vínculo e papel |
+| Aplicação | `modules/attendance/attendance.service.ts` | `list`, `open`, `register`, `close`, `correct` |
+| Apresentação | `modules/attendance/call-view.ts` | Normaliza datas e oculta código e registros de terceiros |
+| Persistência | Prisma + migrations | Integridade, transações e auditoria |
+| Orquestração (front) | `hooks/useAttendance.ts` | Executa ações, evita duplo envio e descarta consultas antigas |
+| Transporte (front) | `integration.ts` | Endpoints e envelope da API |
 
 ---
 
 <a id="api-dados"></a>
-## 🔌 API e dados
+## API e dados
 
 - **Prefixo padrão:** `/frequencia/api` · **Swagger:** `/api/docs` (padrão do `.env.example`)
 - **Sucesso:** `{ success: true, data, timestamp }` · **Erros:** Problem Details
 - **Códigos:** `422` corpo inválido · `401` identidade ausente/inválida · `403` acesso negado · `404` inexistente · `409` conflito
 
-### 🛣️ Endpoints
+###  Endpoints
 
 | Método e caminho | Acesso | Corpo |
 |---|---|---|
@@ -292,9 +292,9 @@ DS-G8-Frequencia/
 | `POST /calls/:id/close` | Professor vinculado ou admin | — |
 | `PATCH /calls/:id/attendance/:studentId` | Professor vinculado ou admin | `{ "status": "presente" }` ou `"ausente"` |
 
-> 🔑 A identidade do aluno vem **do token**, nunca de um `studentId` no corpo do registro. O código é **compartilhado por toda a turma** até expirar. Expirar o código **não encerra** a chamada: o professor encerra e pode abrir outra.
+>  A identidade do aluno vem **do token**, nunca de um `studentId` no corpo do registro. O código é **compartilhado por toda a turma** até expirar. Expirar o código **não encerra** a chamada: o professor encerra e pode abrir outra.
 
-### 🗃️ Modelo de dados (Prisma)
+### Modelo de dados (Prisma)
 
 | Entidade | Papel |
 |---|---|
@@ -309,30 +309,30 @@ DS-G8-Frequencia/
 ---
 
 <a id="qualidade"></a>
-## 🧪 Qualidade e testes
+## Qualidade e testes
 
 | Item | Resultado |
 |---|---|
-| 🖥️ Frontend — testes | **58** (50 da suíte v2 + 8 do cliente HTTP), com tipagem e build aprovados |
-| ⚙️ Backend — testes unitários | **39**, com build aprovado |
-| 🔗 Integração HTTP | **5 cenários** com PostgreSQL temporário e JWT RS256 via JWKS local: autenticação, isolamento, concorrência, duplicidade, correção, auditoria e expiração |
-| 📈 Cobertura (domínio de presença no frontend) | v1: 100% linhas / 97,67% branches · v2: 100% / 100% |
+| Frontend — testes | **58** (50 da suíte v2 + 8 do cliente HTTP), com tipagem e build aprovados |
+| Backend — testes unitários | **39**, com build aprovado |
+|  Integração HTTP | **5 cenários** com PostgreSQL temporário e JWT RS256 via JWKS local: autenticação, isolamento, concorrência, duplicidade, correção, auditoria e expiração |
+| Cobertura (domínio de presença no frontend) | v1: 100% linhas / 97,67% branches · v2: 100% / 100% |
 
-> ℹ️ Os 100% de cobertura valem **apenas para o domínio de presença do frontend**, não para o projeto inteiro. Os testes não substituem a homologação do realm Keycloak, do CORS e do PostgreSQL 16 do compose.
+ Os 100% de cobertura valem **apenas para o domínio de presença do frontend**, não para o projeto inteiro. Os testes não substituem a homologação do realm Keycloak, do CORS e do PostgreSQL 16 do compose.
 
-### 📚 Documentação
+### Documentação
 
 | Documento | Local |
 |---|---|
-| 📘 Manual do desenvolvedor | `docs/manual-desenvolvedor.md` |
-| 🔗 Integração (Sprint 3) e dívida complementar | `docs/integracao/README.md` |
-| ✔️ Checklist da Sprint 3 | `docs/SPRINT3-CHECKLIST.md` |
-| 📉 Dívida técnica e plano de pagamento | `docs/qualidade/divida-tecnica.md` |
-| ♻️ Relatório de refatoração | `docs/qualidade/relatorio-refatoracao.pdf` |
-| 🗂️ Matrizes, logs e análise crítica | `docs/testes/` |
-| 🗄️ Notas de migração do banco | `backend/MIGRATION-NOTES.md` |
+| Manual do desenvolvedor | `docs/manual-desenvolvedor.md` |
+| Integração (Sprint 3) e dívida complementar | `docs/integracao/README.md` |
+| Checklist da Sprint 3 | `docs/SPRINT3-CHECKLIST.md` |
+| Dívida técnica e plano de pagamento | `docs/qualidade/divida-tecnica.md` |
+| Relatório de refatoração | `docs/qualidade/relatorio-refatoracao.pdf` |
+| Matrizes, logs e análise crítica | `docs/testes/` |
+| Notas de migração do banco | `backend/MIGRATION-NOTES.md` |
 
-### ⚠️ Limitações conhecidas
+### Limitações conhecidas
 
 - Nomes completos dos alunos ainda não existem no schema (a lista usa matrícula ou identificador).
 - Não há tela de administração de usuários e matrículas.
@@ -342,7 +342,7 @@ DS-G8-Frequencia/
 ---
 
 <a id="stack"></a>
-## 🛠️ Stack
+## Stack
 
 <p align="center">
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
@@ -359,7 +359,7 @@ DS-G8-Frequencia/
 </p>
 
 <details>
-<summary><b>📦 Dependências principais</b></summary>
+<summary><b> Dependências principais</b></summary>
 
 <br>
 
@@ -380,14 +380,14 @@ Veja `backend/package.json` e `p07-frontend/package.json` para a lista completa.
 - **react-oidc-context** e **oidc-client-ts**: login via Keycloak
 - **Vitest** (3.2.4): testes
 
-> 🧱 Base do frontend adaptada do StarterKit ReactJS do CInCoders.
+>  Base do frontend adaptada do StarterKit ReactJS do CInCoders.
 
 </details>
 
 ---
 
 <a id="equipe"></a>
-## 👥 Equipe
+## Equipe
 
 <div align="center">
   <table>
