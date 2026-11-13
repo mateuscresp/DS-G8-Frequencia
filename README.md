@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&height=200&color=0:042F2E,45:0F766E,100:4C1D95&text=Frequ%C3%AAncia%20UFPE&fontSize=64&fontColor=ffffff&fontAlignY=42&animation=fadeIn&v=99&version=3&cache=1" width="100%" alt="Desenvolvimento de Software" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=200&color=0:042F2E,45:0F766E,100:4C1D95&text=Frequ%C3%AAncia%20UFPE&fontSize=64&fontColor=ffffff&fontAlignY=42&animation=fadeIn&v=99&version=3&cache=1" width="100%" alt="Frequência UFPE" />
 </p>
 
 <p align="center">
