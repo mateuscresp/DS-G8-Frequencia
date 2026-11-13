@@ -1,4 +1,4 @@
-# Módulo health — verificação de saúde
+# Módulo health — verificação de existência
 
 Este módulo expõe um endpoint para checar se a aplicação e o **banco de dados** estão respondendo. Serve para monitoramento e para o Docker.
 
