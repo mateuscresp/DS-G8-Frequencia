@@ -360,7 +360,26 @@ Veja `backend/package.json` e `p07-frontend/package.json` para a lista completa.
           <img src="https://images.weserv.nl/?url=github.com/mateuscresp.png&w=60&h=60&mask=circle" alt="mateuscresp"><br><strong>mateuscresp</strong>
         </a>
       </td>
-      <!-- [PREENCHER] Copie o bloco <td> acima para cada integrante, trocando o usuário do GitHub -->
+      <td valign="middle" align="center" style="border: none; padding: 0 10px;">
+        <a href="https://github.com/USUARIO">
+          <img src="https://images.weserv.nl/?url=github.com/USUARIO.png&w=60&h=60&mask=circle" alt="USUARIO"><br><strong>Eugeni1</strong>
+        </a>
+      </td>
+            <td valign="middle" align="center" style="border: none; padding: 0 10px;">
+        <a href="https://github.com/USUARIO">
+          <img src="https://images.weserv.nl/?url=github.com/USUARIO.png&w=60&h=60&mask=circle" alt="USUARIO"><br><strong>codigopratico</strong>
+        </a>
+      </td>
+            <td valign="middle" align="center" style="border: none; padding: 0 10px;">
+        <a href="https://github.com/USUARIO">
+          <img src="https://images.weserv.nl/?url=github.com/USUARIO.png&w=60&h=60&mask=circle" alt="USUARIO"><br><strong>Guilhermerlemos</strong>
+        </a>
+      </td>
+            <td valign="middle" align="center" style="border: none; padding: 0 10px;">
+        <a href="https://github.com/USUARIO">
+          <img src="https://images.weserv.nl/?url=github.com/USUARIO.png&w=60&h=60&mask=circle" alt="USUARIO"><br><strong>USUARIO</strong>
+        </a>
+      </td>
     </tr>
   </table>
 </div>
