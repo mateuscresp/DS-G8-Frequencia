@@ -1,86 +1,111 @@
-<!-- Banner superior -->
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=venom&height=190&color=0:0F766E,100:6D28D9&text=FREQU%C3%8ANCIA%20UFPE&fontSize=52&fontColor=ffffff&fontAlignY=45&desc=Controle%20de%20Frequ%C3%AAncia%20Acad%C3%AAmica&descAlignY=68&descSize=18&v=99&version=3&cache=1" width="100%" alt="Frequência UFPE" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=200&color=0:042F2E,45:0F766E,100:4C1D95&text=Frequ%C3%AAncia%20UFPE&fontSize=64&fontColor=ffffff&fontAlignY=42&animation=fadeIn&v=99&version=3&cache=1" width="100%" alt="Frequência UFPE" />
 </p>
 
-<!-- Logo (branca no tema escuro, escura no tema claro) -->
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./Assets/logo-cin-branco.png">
     <source media="(prefers-color-scheme: light)" srcset="./Assets/logo-cin-escuro.png">
-    <img src="./Assets/logo-cin-escuro.png" width="320" alt="Centro de Informática - UFPE" />
+    <img src="./Assets/logo-cin-escuro.png" width="220" alt="Centro de Informática - UFPE" />
   </picture>
 </p>
 
-<h1 align="center">Frequência UFPE — Controle de Frequência Acadêmica</h1>
+<h1 align="center">Controle de Frequência Acadêmica</h1>
 
 <p align="center">
-  <strong>Desenvolvimento de Software — Grupo 8 · Projeto P07 (UFPE, 2026.2)</strong>
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&pause=1100&color=2DD4BF&center=true&vCenter=true&width=760&height=40&lines=Chamada+por+c%C3%B3digo+em+tela+cheia;Presen%C3%A7a+registrada+pelo+aluno+no+prazo;React+%C2%B7+NestJS+%C2%B7+PostgreSQL+%C2%B7+Keycloak" alt="Destaques do projeto" />
+</p>
+
+<p align="center">
+  <strong>Desenvolvimento de Software · Grupo 8 · Projeto P07 · UFPE, 2026.2</strong>
   <!-- [CONFIRMAR] nome/código da disciplina -->
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Node.js-22.12%2B-339933?logo=nodedotjs&logoColor=fff&style=for-the-badge" alt="Node.js Badge" />
-  <img src="https://img.shields.io/badge/Sprint-3-1D4ED8?style=for-the-badge" alt="Sprint Badge" />
-  <img src="https://img.shields.io/badge/Testes-97%20passando-0EA5E9?style=for-the-badge" alt="Testes Badge" />
-  <img src="https://img.shields.io/badge/Licença-Acadêmica-64748B?style=for-the-badge" alt="Licença Badge" />
+  <img src="https://img.shields.io/badge/Node.js-22.12%2B-0F766E?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js 22.12+" />
+  <img src="https://img.shields.io/badge/Sprint-3-4C1D95?style=flat-square" alt="Sprint 3" />
+  <img src="https://img.shields.io/badge/testes-97%20passando-0F766E?style=flat-square" alt="97 testes passando" />
+  <img src="https://img.shields.io/badge/auth-Keycloak%20OIDC-4C1D95?style=flat-square&logo=keycloak&logoColor=white" alt="Keycloak OIDC" />
 </p>
 
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&height=100&color=0:1E3A8A,100:0EA5E9&section=footer&v=99&version=3" width="100%" alt="Separador" />
+  <a href="#sobre">Sobre</a> &nbsp;•&nbsp;
+  <a href="#inicio-rapido">Início rápido</a> &nbsp;•&nbsp;
+  <a href="#arquitetura">Arquitetura</a> &nbsp;•&nbsp;
+  <a href="#api-dados">API e dados</a> &nbsp;•&nbsp;
+  <a href="#qualidade">Qualidade</a> &nbsp;•&nbsp;
+  <a href="#stack">Stack</a> &nbsp;•&nbsp;
+  <a href="#equipe">Equipe</a>
 </p>
 
 ---
 
-## 📑 Sumário
+<a id="sobre"></a>
+## 📌 Sobre
 
-- [📝 Resumo do Projeto](#-resumo)
-- [🚀 Guia de Instalação](#-guia-de-instalação)
-- [🏗️ Arquitetura do Projeto](#️-arquitetura-do-projeto)
-- [🔌 API e Modelo de Dados](#-api-e-modelo-de-dados)
-- [🧪 Qualidade e Testes](#-qualidade-e-testes)
-- [🛠️ Tecnologias Utilizadas](#️-tecnologias-utilizadas)
-- [👥 Equipe de Desenvolvimento](#-equipe-de-desenvolvimento)
+Sistema de **Desenvolvimento de Software** do **Grupo 8** que implementa um **controle de frequência acadêmica** com três perfis de acesso:
+
+| Perfil | O que faz |
+|---|---|
+| 🧑‍🏫 **Professor** | **Abre uma chamada** para uma turma com validade de **1 a 120 minutos**, gerando um **código compartilhado** que pode ser **projetado em tela cheia**. Após o encerramento, pode **corrigir presença ou falta**. |
+| 🎓 **Aluno** | **Registra a presença digitando o código** dentro do prazo. Há **uma presença por aluno em cada chamada**. |
+| 🛠️ **Administrador** | Acesso administrativo ao sistema, com visão de todas as turmas. |
+
+A frequência do aluno é calculada **somente sobre chamadas encerradas**: sem registro, a chamada conta como falta; chamadas abertas aparecem como pendentes.
+
+A solução é dividida em um **frontend** em **React + TypeScript + Vite** (`p07-frontend`) e um **backend** em **NestJS + Prisma + PostgreSQL** (`backend`), com **autenticação via Keycloak (OIDC, Authorization Code + PKCE)**. O backend valida o **JWT (assinatura via JWKS, issuer e audience)** e restringe o acesso por **papel e vínculo com a turma**. Abertura, registro, correção e encerramento usam **transação e bloqueio da turma**, e um **índice parcial** garante no máximo uma chamada aberta por turma.
+
+O frontend funciona em **modo demonstração** (dados fictícios, sem banco nem Keycloak) ou em **modo Keycloak** (API real), escolhido por configuração explícita.
+
+> 📦 **Entrega da Sprint 3:** suítes de teste (v1 e v2), matriz de rastreabilidade, **tabela de dívida técnica**, **três refatorações** com testes antes e depois, **manual do desenvolvedor** e a **integração frontend × backend** com evidências.
+
+### 🔄 Ciclo de uma chamada
+
+```mermaid
+stateDiagram-v2
+    [*] --> Aberta: professor abre (1 a 120 min)
+    Aberta --> Aberta: alunos registram presença com o código
+    Aberta --> Encerrada: professor encerra
+    Encerrada --> Encerrada: professor corrige presença ou falta
+```
+
+### 🗺️ Visão geral
+
+```mermaid
+flowchart LR
+    P([Professor]) --> FE
+    A([Aluno]) --> FE
+    ADM([Administrador]) --> FE
+    FE["Frontend<br/>React + TypeScript + Vite<br/>p07-frontend"] -->|"login OIDC (PKCE)"| KC["Keycloak"]
+    FE -->|"API HTTP"| API["Backend<br/>NestJS + Prisma<br/>backend"]
+    API -->|"valida JWT via JWKS"| KC
+    API --> DB[("PostgreSQL 16")]
+```
 
 ---
 
-<a id="-resumo"></a>
-## 📝 Resumo
+<a id="inicio-rapido"></a>
+## 🚀 Início rápido
 
-> Projeto de **Desenvolvimento de Software** do **Grupo 8**, que implementa um **sistema de controle de frequência acadêmica** com três perfis: **Professor**, **Aluno** e **Administrador**.
->
-> O professor **abre uma chamada** para uma turma com validade de **1 a 120 minutos**, gerando um **código compartilhado** que pode ser **projetado em tela cheia**. O aluno **registra a presença digitando o código** dentro do prazo, com **uma presença por aluno em cada chamada**. Depois de encerrada, o professor ainda pode **corrigir presença ou falta**. A frequência do aluno é calculada **somente sobre chamadas encerradas**: sem registro, a chamada conta como falta; chamadas abertas aparecem como pendentes.
->
-> A solução é dividida em um **frontend** em **React + TypeScript + Vite** (`p07-frontend`) e um **backend** em **NestJS + Prisma + PostgreSQL** (`backend`), com **autenticação via Keycloak (OIDC, Authorization Code + PKCE)**. O backend valida o **JWT (assinatura via JWKS, issuer e audience)** e restringe o acesso por **papel e vínculo com a turma**. Abertura, registro, correção e encerramento usam **transação e bloqueio da turma**, e um **índice parcial** garante no máximo uma chamada aberta por turma.
->
-> O frontend funciona em **modo demonstração** (dados fictícios, sem banco nem Keycloak) ou em **modo Keycloak** (API real), escolhido por configuração explícita.
->
-> A entrega registra a **Sprint 3**: suítes de teste (v1 e v2), matriz de rastreabilidade, **tabela de dívida técnica**, **três refatorações** com testes antes e depois, **manual do desenvolvedor** e a **integração frontend × backend** com evidências.
+> **Ambiente de execução:** **Node.js 22.12+** (validado em Node 24 LTS) e **npm**. O backend usa PostgreSQL e Keycloak, disponíveis via Docker Compose.
 
----
+### 📋 Pré-requisitos
 
-<a id="-guia-de-instalação"></a>
-## 🚀 Guia de Instalação
+| Ferramenta | Observação |
+|---|---|
+| **Node.js 22.12+** | O backend define `22` no `.nvmrc` |
+| **Git** | Para clonar o repositório |
+| **npm** | Gerenciador de pacotes |
+| **Docker** e **Docker Compose** | PostgreSQL e Keycloak, apenas no modo integrado |
 
-> **Ambiente de Execução:** **Node.js 22.12+** (validado em Node 24 LTS) e **npm**. O backend usa PostgreSQL e Keycloak, disponíveis via Docker Compose.
-
-### 📋 Pré-requisitos do Sistema
-
-- **Node.js 22.12+** (o backend define `22` no `.nvmrc`)
-- **Git** (para clonagem do repositório)
-- **npm** (gerenciador de pacotes)
-- **Docker** e **Docker Compose** (para PostgreSQL e Keycloak, apenas no modo integrado)
-
-### 🪜 Passo a Passo
-
-#### Passo 1: Clone o Repositório
+### 1️⃣ Clone o repositório
 
 ```bash
 git clone https://github.com/mateuscresp/DS-G8-Frequencia.git
 cd DS-G8-Frequencia
 ```
 
-#### Passo 2: Rode o Frontend em Modo Demonstração (mais rápido)
+### 2️⃣ Modo demonstração (mais rápido)
 
 ```bash
 cd p07-frontend
@@ -92,7 +117,12 @@ Abra a URL exibida pelo Vite. Escolha **Professor**, selecione uma turma e gere 
 
 > 💡 A demonstração usa **dados fictícios** e sincroniza pelo armazenamento local do navegador. Sem `.env`, o modo padrão é `demo`.
 
-#### Passo 3: Suba o Modo Integrado (API + Keycloak)
+### 3️⃣ Modo integrado (API + Keycloak)
+
+<details>
+<summary><b>Ver passo a passo completo</b></summary>
+
+<br>
 
 **3.1 Infraestrutura (PostgreSQL e Keycloak):**
 
@@ -127,7 +157,9 @@ cp .env.example .env.local
 npm run dev
 ```
 
-### ⚙️ Variáveis de Ambiente Principais
+</details>
+
+### ⚙️ Variáveis de ambiente principais
 
 | Local | Variável | Descrição |
 |---|---|---|
@@ -139,7 +171,7 @@ npm run dev
 | `p07-frontend/.env.local` | `VITE_API_URL`, `VITE_KEYCLOAK_JSON` | API e configuração pública do cliente OIDC |
 | `p07-frontend/.env.local` | `VITE_ROLE_ADMIN`, `VITE_ROLE_PROFESSOR`, `VITE_ROLE_ALUNO` | Nomes dos papéis |
 
-### 🐳 Docker (Frontend)
+### 🐳 Docker (frontend)
 
 ```bash
 cd p07-frontend
@@ -149,7 +181,7 @@ docker run --rm -p 8081:80 frequencia-front
 
 A imagem serve a demonstração em `http://localhost:8081`. Para o modo integrado, informe `VITE_APP_MODE`, `VITE_API_URL` e `VITE_KEYCLOAK_JSON` como argumentos de build.
 
-### ✅ Validação Pós-Execução
+### ✅ Validação pós-execução
 
 ```bash
 # Frontend
@@ -171,11 +203,11 @@ npm run test:e2e
 
 ---
 
-<a id="️-arquitetura-do-projeto"></a>
-## 🏗️ Arquitetura do Projeto
+<a id="arquitetura"></a>
+## 🏗️ Arquitetura
 
 <details>
-<summary><strong>📂 Ver estrutura de pastas</strong></summary>
+<summary><b>📂 Estrutura de pastas</b></summary>
 
 ```text
 DS-G8-Frequencia/
@@ -226,7 +258,7 @@ DS-G8-Frequencia/
 
 </details>
 
-### 🧩 Principais Responsabilidades
+### 🧩 Principais responsabilidades
 
 | Camada | Arquivo / função | Responsabilidade |
 |---|---|---|
@@ -240,8 +272,8 @@ DS-G8-Frequencia/
 
 ---
 
-<a id="-api-e-modelo-de-dados"></a>
-## 🔌 API e Modelo de Dados
+<a id="api-dados"></a>
+## 🔌 API e dados
 
 - **Prefixo padrão:** `/frequencia/api` · **Swagger:** `/api/docs` (padrão do `.env.example`)
 - **Sucesso:** `{ success: true, data, timestamp }` · **Erros:** Problem Details
@@ -262,7 +294,7 @@ DS-G8-Frequencia/
 
 > 🔑 A identidade do aluno vem **do token**, nunca de um `studentId` no corpo do registro. O código é **compartilhado por toda a turma** até expirar. Expirar o código **não encerra** a chamada: o professor encerra e pode abrir outra.
 
-### 🗃️ Modelo de Dados (Prisma)
+### 🗃️ Modelo de dados (Prisma)
 
 | Entidade | Papel |
 |---|---|
@@ -276,8 +308,8 @@ DS-G8-Frequencia/
 
 ---
 
-<a id="-qualidade-e-testes"></a>
-## 🧪 Qualidade e Testes
+<a id="qualidade"></a>
+## 🧪 Qualidade e testes
 
 | Item | Resultado |
 |---|---|
@@ -300,7 +332,7 @@ DS-G8-Frequencia/
 | 🗂️ Matrizes, logs e análise crítica | `docs/testes/` |
 | 🗄️ Notas de migração do banco | `backend/MIGRATION-NOTES.md` |
 
-### ⚠️ Limitações Conhecidas
+### ⚠️ Limitações conhecidas
 
 - Nomes completos dos alunos ainda não existem no schema (a lista usa matrícula ou identificador).
 - Não há tela de administração de usuários e matrículas.
@@ -309,24 +341,27 @@ DS-G8-Frequencia/
 
 ---
 
-<a id="️-tecnologias-utilizadas"></a>
-## 🛠️ Tecnologias Utilizadas
+<a id="stack"></a>
+## 🛠️ Stack
 
 <p align="center">
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff&style=for-the-badge" alt="TypeScript Badge" />
-  <img src="https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=000&style=for-the-badge" alt="React Badge" />
-  <img src="https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=fff&style=for-the-badge" alt="Vite Badge" />
-  <img src="https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=fff&style=for-the-badge" alt="NestJS Badge" />
-  <img src="https://img.shields.io/badge/Prisma-2D3748?logo=prisma&logoColor=fff&style=for-the-badge" alt="Prisma Badge" />
-  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=fff&style=for-the-badge" alt="PostgreSQL Badge" />
-  <img src="https://img.shields.io/badge/Keycloak-4D4D4D?logo=keycloak&logoColor=fff&style=for-the-badge" alt="Keycloak Badge" />
-  <img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff&style=for-the-badge" alt="Docker Badge" />
-  <img src="https://img.shields.io/badge/Vitest-6E9F18?logo=vitest&logoColor=fff&style=for-the-badge" alt="Vitest Badge" />
-  <img src="https://img.shields.io/badge/Biome-60A5FA?logo=biome&logoColor=fff&style=for-the-badge" alt="Biome Badge" />
-  <img src="https://img.shields.io/badge/Git-F03C2E?logo=git&logoColor=fff&style=for-the-badge" alt="Git Badge" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/NestJS-E0234E?style=flat-square&logo=nestjs&logoColor=white" alt="NestJS" />
+  <img src="https://img.shields.io/badge/Prisma-2D3748?style=flat-square&logo=prisma&logoColor=white" alt="Prisma" />
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Keycloak-4D4D4D?style=flat-square&logo=keycloak&logoColor=white" alt="Keycloak" />
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker" />
+  <img src="https://img.shields.io/badge/Vitest-6E9F18?style=flat-square&logo=vitest&logoColor=white" alt="Vitest" />
+  <img src="https://img.shields.io/badge/Biome-60A5FA?style=flat-square&logo=biome&logoColor=white" alt="Biome" />
+  <img src="https://img.shields.io/badge/Git-F03C2E?style=flat-square&logo=git&logoColor=white" alt="Git" />
 </p>
 
-### 📦 Dependências Principais
+<details>
+<summary><b>📦 Dependências principais</b></summary>
+
+<br>
 
 Veja `backend/package.json` e `p07-frontend/package.json` para a lista completa.
 
@@ -347,10 +382,12 @@ Veja `backend/package.json` e `p07-frontend/package.json` para a lista completa.
 
 > 🧱 Base do frontend adaptada do StarterKit ReactJS do CInCoders.
 
+</details>
+
 ---
 
-<a id="-equipe-de-desenvolvimento"></a>
-## 👥 Equipe de Desenvolvimento
+<a id="equipe"></a>
+## 👥 Equipe
 
 <div align="center">
   <table>
@@ -384,8 +421,6 @@ Veja `backend/package.json` e `p07-frontend/package.json` para a lista completa.
   </table>
 </div>
 
-<br>
-
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&height=120&color=0:0EA5E9,100:1E3A8A&section=footer&v=99&version=3&cache=1" width="100%" alt="Rodapé" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&height=120&color=0:4C1D95,100:0F766E&section=footer&v=99&version=3&cache=1" width="100%" alt="Rodapé" />
 </p>
