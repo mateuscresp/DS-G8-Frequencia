@@ -1,0 +1,48 @@
+{
+  "v1": {
+    "tests": 44,
+    "passed": 44,
+    "failed": 0,
+    "loadErrors": 0,
+    "lines": {
+      "total": 55,
+      "covered": 55,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 43,
+      "covered": 42,
+      "skipped": 0,
+      "pct": 97.67
+    },
+    "criteria": "13/14",
+    "partitions": "27/32",
+    "boundaries": "18/18",
+    "withoutMeaningfulAssertion": 0,
+    "demonstratedDefects": 0
+  },
+  "v2": {
+    "tests": 50,
+    "passed": 50,
+    "failed": 0,
+    "loadErrors": 0,
+    "lines": {
+      "total": 55,
+      "covered": 55,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 45,
+      "covered": 45,
+      "skipped": 0,
+      "pct": 100
+    },
+    "criteria": "14/14",
+    "partitions": "32/32",
+    "boundaries": "18/18",
+    "withoutMeaningfulAssertion": 0,
+    "demonstratedDefects": 0
+  }
+}

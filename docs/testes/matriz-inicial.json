@@ -1,0 +1,282 @@
+[
+  {
+    "id": "CT01",
+    "criterio": "US01-CA1",
+    "particao": "duracao-inteira-valida",
+    "limites": [
+      "1",
+      "2",
+      "119",
+      "120"
+    ],
+    "entrada": "1, 2, 5, 119, 120 minutos",
+    "esperado": "Aceitar; expiresAt = agora + minutos × 60000"
+  },
+  {
+    "id": "CT02",
+    "criterio": "US01-CA1",
+    "particao": "duracao-fora-faixa",
+    "limites": [
+      "0",
+      "121"
+    ],
+    "entrada": "0, -1, 121",
+    "esperado": "Rejeitar duração"
+  },
+  {
+    "id": "CT03",
+    "criterio": "US01-CA1",
+    "particao": "duracao-nao-inteira",
+    "limites": [],
+    "entrada": "1.5, NaN, Infinity",
+    "esperado": "Rejeitar duração"
+  },
+  {
+    "id": "CT04",
+    "criterio": "US01-CA2",
+    "particao": "mesma-turma-aberta",
+    "limites": [],
+    "entrada": "Chamada aberta da mesma turma, inclusive expirada",
+    "esperado": "Rejeitar segunda abertura"
+  },
+  {
+    "id": "CT05",
+    "criterio": "US01-CA2",
+    "particao": "turma-sem-chamada-aberta",
+    "limites": [],
+    "entrada": "Chamada encerrada na mesma turma; aberta em outra",
+    "esperado": "Abrir sem alterar chamadas anteriores"
+  },
+  {
+    "id": "CT06",
+    "criterio": "US01-CA3",
+    "particao": "codigo-novo",
+    "limites": [],
+    "entrada": "Abrir chamada",
+    "esperado": "Código com seis caracteres hexadecimais maiúsculos; ID e datas válidos"
+  },
+  {
+    "id": "CT07",
+    "criterio": "US01-CA3",
+    "particao": "colisao-de-codigo",
+    "limites": [],
+    "entrada": "Gerador retorna um código já usado e depois outro",
+    "esperado": "Repetir sorteio e preservar chamada existente"
+  },
+  {
+    "id": "CT08",
+    "criterio": "US02-CA1",
+    "particao": "codigo-inexistente",
+    "limites": [],
+    "entrada": "ZZZZZZ",
+    "esperado": "Erro de código inválido"
+  },
+  {
+    "id": "CT09",
+    "criterio": "US02-CA1",
+    "particao": "chamada-encerrada",
+    "limites": [],
+    "entrada": "Código de chamada fechada",
+    "esperado": "Rejeitar registro"
+  },
+  {
+    "id": "CT10",
+    "criterio": "US02-CA1",
+    "particao": "codigo-ainda-valido",
+    "limites": [
+      "expiresAt - 1 ms"
+    ],
+    "entrada": "Aluno matriculado, 1 ms antes da expiração",
+    "esperado": "Registrar presença"
+  },
+  {
+    "id": "CT11",
+    "criterio": "US02-CA1",
+    "particao": "codigo-expirado",
+    "limites": [
+      "expiresAt",
+      "expiresAt + 1 ms"
+    ],
+    "entrada": "No instante e depois da expiração",
+    "esperado": "Rejeitar registro"
+  },
+  {
+    "id": "CT12",
+    "criterio": "US02-CA2",
+    "particao": "aluno-nao-matriculado",
+    "limites": [],
+    "entrada": "Aluno estranho à turma ds",
+    "esperado": "Rejeitar registro"
+  },
+  {
+    "id": "CT13",
+    "criterio": "US02-CA2",
+    "particao": "aluno-matriculado",
+    "limites": [],
+    "entrada": "Kauan na turma ds",
+    "esperado": "Registrar presente"
+  },
+  {
+    "id": "CT14",
+    "criterio": "US02-CA3",
+    "particao": "presenca-ja-registrada",
+    "limites": [],
+    "entrada": "Registro prévio presente",
+    "esperado": "Rejeitar duplicação"
+  },
+  {
+    "id": "CT15",
+    "criterio": "US02-CA3",
+    "particao": "ausencia-manual",
+    "limites": [],
+    "entrada": "Registro prévio ausente",
+    "esperado": "Orientar correção pelo professor; não sobrescrever"
+  },
+  {
+    "id": "CT16",
+    "criterio": "US02-CA4",
+    "particao": "alteracao-isolada",
+    "limites": [],
+    "entrada": "Duas chamadas e outros alunos presentes",
+    "esperado": "Atualizar só o aluno/chamada; entrada original intacta"
+  },
+  {
+    "id": "CT17",
+    "criterio": "US03-CA1",
+    "particao": "chamadas-abertas",
+    "limites": [],
+    "entrada": "Somente chamadas abertas, mesmo com presença",
+    "esperado": "Ignorar no total e no percentual"
+  },
+  {
+    "id": "CT18",
+    "criterio": "US03-CA1",
+    "particao": "chamadas-encerradas",
+    "limites": [],
+    "entrada": "Mistura abertas e encerradas",
+    "esperado": "Contar somente encerradas"
+  },
+  {
+    "id": "CT19",
+    "criterio": "US03-CA2",
+    "particao": "presente",
+    "limites": [],
+    "entrada": "Presente em todas as encerradas",
+    "esperado": "100% e zero faltas"
+  },
+  {
+    "id": "CT20",
+    "criterio": "US03-CA2",
+    "particao": "ausente-explicito",
+    "limites": [],
+    "entrada": "Ausente em chamada encerrada",
+    "esperado": "0% e uma falta"
+  },
+  {
+    "id": "CT21",
+    "criterio": "US03-CA2",
+    "particao": "sem-registro-encerrada",
+    "limites": [],
+    "entrada": "Nenhum registro na chamada encerrada",
+    "esperado": "Contar falta"
+  },
+  {
+    "id": "CT22",
+    "criterio": "US03-CA2",
+    "particao": "fracao-arredondada",
+    "limites": [],
+    "entrada": "Uma presença em três encerradas",
+    "esperado": "33%; duas faltas"
+  },
+  {
+    "id": "CT23",
+    "criterio": "US03-CA3",
+    "particao": "nenhuma-aula",
+    "limites": [],
+    "entrada": "Lista vazia",
+    "esperado": "total=0, present=0, absent=0, percentage=null"
+  },
+  {
+    "id": "CT24",
+    "criterio": "US04-CA1",
+    "particao": "tempo-positivo",
+    "limites": [
+      "1 ms",
+      "999 ms",
+      "1000 ms",
+      "1001 ms",
+      "59999 ms",
+      "60000 ms",
+      "60001 ms"
+    ],
+    "entrada": "Tempo restante em torno de um segundo e um minuto",
+    "esperado": "Arredondar para cima; formato mm:ss"
+  },
+  {
+    "id": "CT25",
+    "criterio": "US04-CA1",
+    "particao": "tempo-esgotado",
+    "limites": [
+      "-1 ms",
+      "0 ms"
+    ],
+    "entrada": "Expiração igual ou anterior a agora",
+    "esperado": "00:00; nunca negativo"
+  },
+  {
+    "id": "CT26",
+    "criterio": "US05-CA1",
+    "particao": "armazenamento-vazio",
+    "limites": [],
+    "entrada": "Chave inexistente",
+    "esperado": "Lista vazia"
+  },
+  {
+    "id": "CT27",
+    "criterio": "US05-CA1",
+    "particao": "armazenamento-valido",
+    "limites": [],
+    "entrada": "JSON com chamadas",
+    "esperado": "Restaurar os registros"
+  },
+  {
+    "id": "CT28",
+    "criterio": "US05-CA2",
+    "particao": "com-web-locks",
+    "limites": [],
+    "entrada": "navigator.locks disponível",
+    "esperado": "Ler e gravar dentro do lock; devolver lista persistida"
+  },
+  {
+    "id": "CT29",
+    "criterio": "US05-CA2",
+    "particao": "sem-web-locks",
+    "limites": [],
+    "entrada": "navigator.locks ausente",
+    "esperado": "Ler, transformar e salvar pelo fallback"
+  },
+  {
+    "id": "CT30",
+    "criterio": "US05-CA3",
+    "particao": "armazenamento-corrompido",
+    "limites": [],
+    "entrada": "JSON inválido",
+    "esperado": "Propagar erro; não sobrescrever silenciosamente"
+  },
+  {
+    "id": "CT31",
+    "criterio": "US05-CA3",
+    "particao": "falha-na-transformacao",
+    "limites": [],
+    "entrada": "Callback lança erro",
+    "esperado": "Rejeitar Promise e preservar valor salvo"
+  },
+  {
+    "id": "CT32",
+    "criterio": "US05-CA3",
+    "particao": "falha-na-gravacao",
+    "limites": [],
+    "entrada": "setItem lança erro de cota",
+    "esperado": "Propagar falha de gravação"
+  }
+]

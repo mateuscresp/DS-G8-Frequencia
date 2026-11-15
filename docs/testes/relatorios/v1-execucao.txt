@@ -1,0 +1,26 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> p07-frontend@1.0.0 test:coverage:v1
+> vitest run tests/v1-llm --coverage --coverage.reportsDirectory=../docs/testes/relatorios/v1
+
+
+ RUN  v3.2.4 /workspace/scratch/23694bc7de94/sprint3/p07-frontend
+      Coverage enabled with v8
+
+ ✓ tests/v1-llm/attendance.test.ts (44 tests) 16ms
+
+ Test Files  1 passed (1)
+      Tests  44 passed (44)
+   Start at  20:24:24
+   Duration  303ms (transform 37ms, setup 0ms, collect 40ms, tests 16ms, environment 0ms, prepare 59ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |    97.67 |     100 |     100 |                   
+ src               |     100 |    97.36 |     100 |     100 |                   
+  attendance.ts    |     100 |    97.36 |     100 |     100 | 47                
+ ...les/attendance |     100 |      100 |     100 |     100 |                   
+  summary.ts       |     100 |      100 |     100 |     100 |                   
+-------------------|---------|----------|---------|---------|-------------------

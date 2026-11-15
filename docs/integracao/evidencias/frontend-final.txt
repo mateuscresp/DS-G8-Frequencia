@@ -1,0 +1,50 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> p07-frontend@1.0.0 check
+> tsc --noEmit -p tsconfig.test.json
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> p07-frontend@1.0.0 test
+> vitest run tests/v2 tests/integration
+
+
+ RUN  v3.2.4 /workspace/scratch/23694bc7de94/integracao/p07-frontend
+
+ ✓ tests/v2/gaps.test.ts (6 tests) 6ms
+ ✓ tests/integration/api.test.ts (8 tests) 12ms
+ ✓ tests/v2/attendance.test.ts (44 tests) 21ms
+
+ Test Files  3 passed (3)
+      Tests  58 passed (58)
+   Start at  08:52:47
+   Duration  311ms (transform 108ms, setup 0ms, collect 187ms, tests 39ms, environment 0ms, prepare 191ms)
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> p07-frontend@1.0.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.8 building client environment for production...
+transforming...
+✓ 1778 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                        0.45 kB │ gzip:  0.30 kB
+dist/assets/poppins-latin-500-normal-C8OXljZJ.woff2    7.75 kB
+dist/assets/poppins-latin-700-normal-Qrb0O0WB.woff2    7.82 kB
+dist/assets/poppins-latin-400-normal-cpxAROuN.woff2    7.88 kB
+dist/assets/poppins-latin-600-normal-zEkxB9Mr.woff2    8.00 kB
+dist/assets/poppins-latin-500-normal-DGXqpDMm.woff    10.37 kB
+dist/assets/poppins-latin-700-normal-BVuQR_eA.woff    10.43 kB
+dist/assets/poppins-latin-400-normal-BOb3E3N0.woff    10.53 kB
+dist/assets/poppins-latin-600-normal-BJdTmd5m.woff    10.60 kB
+dist/assets/roboto-latin-400-normal-D27F5sTu.woff     21.06 kB
+dist/assets/roboto-latin-500-normal-fsTFPL3E.woff     21.17 kB
+dist/assets/roboto-latin-300-normal-Dqn3NW0Y.woff     21.36 kB
+dist/assets/roboto-latin-400-normal-BqEyEoaF.woff2    21.88 kB
+dist/assets/roboto-latin-300-normal-CCzlftfr.woff2    22.07 kB
+dist/assets/roboto-latin-500-normal-7RbcRiD8.woff2    22.20 kB
+dist/assets/index-CJ1WBJ9i.css                        16.15 kB │ gzip:  4.17 kB
+dist/assets/index-D4OxcU2z.js                        240.54 kB │ gzip: 78.56 kB
+✓ built in 1.70s

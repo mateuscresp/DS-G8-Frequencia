@@ -1,0 +1,27 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+ RUN  v3.2.4 /workspace/scratch/23694bc7de94/sprint3/p07-frontend
+      Coverage enabled with v8
+
+ ✓ tests/v2/gaps.test.ts (6 tests) 6ms
+ ✓ tests/v2/attendance.test.ts (44 tests) 15ms
+
+ Test Files  2 passed (2)
+      Tests  50 passed (50)
+   Start at  20:29:07
+   Duration  296ms (transform 68ms, setup 0ms, collect 107ms, tests 21ms, environment 0ms, prepare 109ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |      100 |     100 |     100 |                   
+ src               |     100 |      100 |     100 |     100 |                   
+  attendance.ts    |     100 |      100 |     100 |     100 |                   
+ ...les/attendance |     100 |      100 |     100 |     100 |                   
+  storage.ts       |     100 |      100 |     100 |     100 |                   
+  summary.ts       |     100 |      100 |     100 |     100 |                   
+ ...endance/domain |     100 |      100 |     100 |     100 |                   
+  constants.ts     |     100 |      100 |     100 |     100 |                   
+  rules.ts         |     100 |      100 |     100 |     100 |                   
+-------------------|---------|----------|---------|---------|-------------------
