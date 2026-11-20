@@ -18,7 +18,6 @@
 
 <p align="center">
   <strong>Desenvolvimento de Software · Grupo 8 · Projeto P07 · UFPE, 2026.2</strong>
-  <!-- [CONFIRMAR] nome/código da disciplina -->
 </p>
 
 <p align="center">
@@ -102,7 +101,7 @@ flowchart LR
 ### 1. Clonar o repositório
 
 ```bash
-git clone [https://github.com/mateuscresp/DS-G8-Frequencia.git](https://github.com/mateuscresp/DS-G8-Frequencia.git)
+git clone https://github.com/mateuscresp/DS-G8-Frequencia.git
 cd DS-G8-Frequencia
 ```
 
@@ -307,6 +306,8 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5433/frequencia_test" npm
 ```
 
 > ⚠️ **Nunca aponte `test:e2e` para o banco principal (`frequencia`).** A suíte cria e remove fixtures próprias durante a execução.
+
+---
 
 <a id="arquitetura"></a>
 ##  Arquitetura
