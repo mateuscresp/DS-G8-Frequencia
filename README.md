@@ -82,7 +82,7 @@ flowchart LR
 ```
 
 ---
-<a id="inicio-rapido"></a> 
+<a id="inicio-rapido"></a>
 ## Início rápido
 
 > **Ambiente de execução:** **Node.js 22.12+** (validado em Node 24 LTS) e **npm**. O backend utiliza PostgreSQL 16 e Keycloak 25 via Docker Compose.
@@ -101,7 +101,7 @@ flowchart LR
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/mateuscresp/DS-G8-Frequencia.git
+git clone [https://github.com/mateuscresp/DS-G8-Frequencia.git](https://github.com/mateuscresp/DS-G8-Frequencia.git)
 cd DS-G8-Frequencia
 ```
 
@@ -109,7 +109,9 @@ cd DS-G8-Frequencia
 
 ### 2. Modo demonstração (sem Docker, banco ou Keycloak)
 
-Ideal para validar a interface e o fluxo de chamada rapidamente com dados fictícios armazenados no navegador:
+Ideal para validar a interface e o fluxo de chamada rapidamente com dados fictícios armazenados no navegador.
+
+#### Linux (Bash / Zsh)
 
 ```bash
 cd p07-frontend
@@ -117,6 +119,15 @@ npm ci
 npm run dev
 ```
 
+#### Windows (PowerShell)
+
+```powershell
+Set-Location p07-frontend
+npm ci
+npm run dev
+```
+
+**Como testar:**
 1. Acesse a URL exibida pelo Vite (padrão: `http://localhost:5173`).
 2. Escolha **Professor**, selecione uma turma e abra uma chamada para gerar o código.
 3. Clique em **Projetar** para exibir o código em tela cheia.
@@ -129,26 +140,13 @@ npm run dev
 ### 3. Modo integrado (Frontend + Backend NestJS + PostgreSQL + Keycloak)
 
 <details>
-<summary><b>Ver passo a passo completo</b></summary>
+<summary><b>Ver pipeline completo (Linux e Windows)</b></summary>
 
 <br>
 
-#### 3.1 Subir PostgreSQL e Keycloak
+#### Etapa A — Provisionar o Keycloak (comum a Linux e Windows)
 
-A partir da raiz do repositório (`DS-G8-Frequencia/`):
-
-```bash
-cd backend
-docker compose up -d
-```
-
-Aguarde cerca de 20–30 segundos até o Keycloak finalizar a inicialização (`http://localhost:8080`).
-* **PostgreSQL:** `localhost:5433` (usuário `postgres`, senha `postgres`, banco `frequencia`)
-* **Keycloak Admin Console:** `http://localhost:8080` (usuário `admin`, senha `admin`)
-
-#### 3.2 Provisionar o Keycloak
-
-> O `docker-compose.yml` não importa o realm automaticamente. Configure uma única vez no console (`http://localhost:8080`):
+Após subir os containers (passo 1 de cada sistema abaixo), aguarde cerca de 20–30 segundos e acesse o **Keycloak Admin Console** em `http://localhost:8080` (usuário `admin`, senha `admin`):
 
 1. **Criar o Realm:** crie o realm `p07-frequencia` e selecione-o.
 2. **Criar os papéis (Realm Roles):** crie exatamente os três papéis:
@@ -167,26 +165,29 @@ Aguarde cerca de 20–30 segundos até o Keycloak finalizar a inicialização (`
    * Defina um nome (ex.: `p07-back-audience`), preencha **Included Custom Audience** com `p07-back`, ative **Add to access token** (`On`) e salve.
 5. **Criar usuários de teste:** em **Users → Add user**, crie um usuário para professor e outro para aluno:
    * Na aba **Credentials**, defina uma senha com **Temporary** desativado (`Off`).
-   * Na aba **Role mapping**, atribua `p07-professor` ou `p07-student`.
-   * Copie o **ID** (UUID / `sub`) de cada usuário criado — ele será usado no passo 3.4.
+   * Na aba **Role mapping** (filtre por *Realm roles*), atribua `p07-professor` ou `p07-student`.
+   * Copie o **ID** (UUID / `sub`) de cada usuário criado — ele será usado no Prisma Studio.
 
 > ⚠️ **Nunca coloque segredo de cliente em variáveis `VITE_*` do frontend.**
 
-#### 3.3 Configurar e iniciar o Backend
+---
 
-Ainda dentro de `backend/`:
+#### Etapa B1 — Pipeline de execução no Linux (Bash / Zsh)
+
+**1. Subir PostgreSQL e Keycloak (a partir da raiz `DS-G8-Frequencia/`):**
 
 ```bash
-# Linux / macOS / Git Bash
-cp .env.example .env
-
-# Windows (PowerShell)
-# Copy-Item .env.example .env
+cd backend
+docker compose up -d
+# Nota: caso seu usuário Linux não esteja no grupo docker, utilize: sudo docker compose up -d
 ```
 
-Os valores padrão do `.env.example` já correspondem ao Docker Compose (`porta 5433`, realm `p07-frequencia`, client `p07-back` e CORS `http://localhost:5173`). Em seguida, instale as dependências, aplique as migrations em banco novo e inicie a API:
+**2. Provisionar o Keycloak:** siga a **Etapa A** acima (`http://localhost:8080`).
+
+**3. Configurar e iniciar o Backend (dentro de `backend/`):**
 
 ```bash
+cp .env.example .env
 npm ci
 npm run prisma:generate
 npm run migration:run     # veja backend/MIGRATION-NOTES.md se usar banco já existente
@@ -194,46 +195,71 @@ npm run db:seed           # popula apenas os status iniciais (CallStatus e Atten
 npm run dev
 ```
 
-A API ficará disponível em `http://localhost:3000/frequencia/api` e a documentação Swagger em `http://localhost:3000/api/docs`.
+A API ficará disponível em `http://localhost:3000/frequencia/api` e o Swagger em `http://localhost:3000/api/docs`.
 
-#### 3.4 Cadastrar turmas e vínculos acadêmicos
-
-Como o `db:seed` cria apenas os status de chamada/presença, cadastre ao menos uma turma e vincule os `sub` (UUIDs) do Keycloak usando o Prisma Studio (em outro terminal, dentro de `backend/`):
+**4. Cadastrar turmas e vínculos acadêmicos (em um 2º terminal, dentro de `backend/`):**
 
 ```bash
 cd backend
 npx prisma studio
 ```
 
-Pela interface web do Prisma Studio (`http://localhost:5555`), preencha nesta ordem:
-1. **`Teacher` e `Student`:** cadastre os usuários informando o UUID do Keycloak no campo `keycloakId`.
-2. **`Class`:** crie uma turma (ex.: código, nome e semestre).
-3. **`ClassTeacher` e `Enrollment`:** vincule o professor e os alunos à turma criada.
+Acesse `http://localhost:5555` e cadastre nesta ordem: `Teacher` e `Student` (com o UUID do Keycloak em `keycloakId`), `Class`, e os vínculos `ClassTeacher` e `Enrollment`.
 
-#### 3.5 Configurar e iniciar o Frontend
-
-Em um novo terminal, a partir da raiz do repositório (`DS-G8-Frequencia/`):
+**5. Configurar e iniciar o Frontend (em um 3º terminal, a partir da raiz `DS-G8-Frequencia/`):**
 
 ```bash
 cd p07-frontend
 npm ci
-
-# Linux / macOS / Git Bash
 cp .env.example .env.local
-
-# Windows (PowerShell)
-# Copy-Item .env.example .env.local
+sed -i 's/^VITE_APP_MODE=demo/VITE_APP_MODE=keycloak/' .env.local
+npm run dev
 ```
 
-Abra `p07-frontend/.env.local` e altere a primeira variável para ativar a autenticação via Keycloak:
+Acesse `http://localhost:5173` e faça login com os usuários criados no Keycloak.
 
-```env
-VITE_APP_MODE=keycloak
+---
+
+#### Etapa B2 — Pipeline de execução no Windows (PowerShell)
+
+**1. Subir PostgreSQL e Keycloak (com o Docker Desktop aberto, a partir da raiz `DS-G8-Frequencia\`):**
+
+```powershell
+Set-Location backend
+docker compose up -d
 ```
 
-As demais variáveis (`VITE_API_URL`, `VITE_KEYCLOAK_JSON` e `VITE_ROLE_*`) já vêm pré-configuradas no `.env.example` para o ambiente local. Inicie o frontend:
+**2. Provisionar o Keycloak:** siga a **Etapa A** acima (`http://localhost:8080`).
 
-```bash
+**3. Configurar e iniciar o Backend (dentro de `backend\`):**
+
+```powershell
+Copy-Item .env.example .env
+npm ci
+npm run prisma:generate
+npm run migration:run     # veja backend/MIGRATION-NOTES.md se usar banco já existente
+npm run db:seed           # popula apenas os status iniciais (CallStatus e AttendanceStatus)
+npm run dev
+```
+
+A API ficará disponível em `http://localhost:3000/frequencia/api` e o Swagger em `http://localhost:3000/api/docs`.
+
+**4. Cadastrar turmas e vínculos acadêmicos (em um 2º terminal PowerShell, dentro de `backend\`):**
+
+```powershell
+Set-Location backend
+npx prisma studio
+```
+
+Acesse `http://localhost:5555` e cadastre nesta ordem: `Teacher` e `Student` (com o UUID do Keycloak em `keycloakId`), `Class`, e os vínculos `ClassTeacher` e `Enrollment`.
+
+**5. Configurar e iniciar o Frontend (em um 3º terminal PowerShell, a partir da raiz `DS-G8-Frequencia\`):**
+
+```powershell
+Set-Location p07-frontend
+npm ci
+Copy-Item .env.example .env.local
+(Get-Content .env.local) -replace '^VITE_APP_MODE=demo', 'VITE_APP_MODE=keycloak' | Set-Content .env.local
 npm run dev
 ```
 
@@ -273,9 +299,11 @@ A imagem serve o modo demonstração em `http://localhost:8081`. Para gerar a im
 
 ---
 
-### Validação pós-execução
+### Pipeline de validação e testes
 
-A partir da raiz do repositório (`DS-G8-Frequencia/`):
+> ⚠️ **Nunca aponte `test:e2e` para o banco principal (`frequencia`).** A suíte exige um banco exclusivo com `_test` no nome e cria/remove fixtures próprias durante a execução.
+
+#### Linux (Bash / Zsh — a partir da raiz `DS-G8-Frequencia/`)
 
 ```bash
 # 1. Validar Frontend (tipagem, testes e build)
@@ -285,28 +313,37 @@ npm run check && npm test && npm run build
 # 2. Validar Backend (lint, testes unitários e build)
 cd ../backend
 npm run lint:ci && npm test && npm run build
-```
 
-#### Testes HTTP de integração (Backend)
-
-A suíte E2E exige um banco PostgreSQL **exclusivo e descartável** cujo nome contenha `_test`. Dentro de `backend/`, com o container `p07-postgres` em execução:
-
-```bash
-# Criar banco descartável de teste
-docker exec -it p07-postgres createdb -U postgres frequencia_test
-
-# Linux / macOS / Git Bash
+# 3. Validar Integração HTTP (E2E) com banco descartável
+docker exec p07-postgres createdb -U postgres frequencia_test
 DATABASE_URL="postgresql://postgres:postgres@localhost:5433/frequencia_test" npm run migration:run
 DATABASE_URL="postgresql://postgres:postgres@localhost:5433/frequencia_test" npm run test:e2e
-
-# Windows (PowerShell)
-# $env:DATABASE_URL="postgresql://postgres:postgres@localhost:5433/frequencia_test"
-# npm run migration:run
-# npm run test:e2e
+docker exec p07-postgres dropdb -U postgres frequencia_test
 ```
 
-> ⚠️ **Nunca aponte `test:e2e` para o banco principal (`frequencia`).** A suíte cria e remove fixtures próprias durante a execução.
+#### Windows (PowerShell — a partir da raiz `DS-G8-Frequencia\`)
 
+```powershell
+# 1. Validar Frontend (tipagem, testes e build)
+Set-Location p07-frontend
+npm run check
+npm test
+npm run build
+
+# 2. Validar Backend (lint, testes unitários e build)
+Set-Location ..\backend
+npm run lint:ci
+npm test
+npm run build
+
+# 3. Validar Integração HTTP (E2E) com banco descartável
+docker exec p07-postgres createdb -U postgres frequencia_test
+$env:DATABASE_URL="postgresql://postgres:postgres@localhost:5433/frequencia_test"
+npm run migration:run
+npm run test:e2e
+Remove-Item Env:DATABASE_URL
+docker exec p07-postgres dropdb -U postgres frequencia_test
+```
 ---
 
 <a id="arquitetura"></a>
