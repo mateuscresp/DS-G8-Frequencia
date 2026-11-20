@@ -23,12 +23,11 @@ npm run build
 
 ## Integração atual
 
-Copie `.env.example` para `.env.local` e configure `VITE_APP_MODE=keycloak` e `VITE_KEYCLOAK_JSON`. Use apenas a configuração pública do cliente. Use o cliente público do frontend no realm do projeto, com fluxo padrão, PKCE S256 e origens e URLs de redirecionamento correspondentes à URL do Vite ou do deploy. O perfil é derivado dos papéis ADMIN, PROFESSOR e STUDENT no realm ou no cliente configurado. Os nomes podem ser ajustados por VITE_ROLE_ADMIN, VITE_ROLE_PROFESSOR e VITE_ROLE_ALUNO. A sessão OIDC usa o armazenamento de sessão padrão do oidc-client-ts. A alternância manual entre perfis existe somente na demonstração.
+Copie `.env.example` para `.env.local`, altere `VITE_APP_MODE=keycloak` e revise `VITE_API_URL` e `VITE_KEYCLOAK_JSON` (os valores padrão do `.env.example` já apontam para `http://localhost:3000/frequencia/api` e o realm `p07-frequencia`). Use apenas a configuração pública do cliente OIDC (`p07-front`, fluxo Authorization Code + PKCE S256).
 
-A tela docente consulta `GET /classes` e `GET /classes/:id/students` usando o envelope `{ success, data }`. A filtragem docente na interface usa o `sub` do Keycloak e o `keycloakId` dos vínculos. As rotas atuais são públicas no NestJS. Para dados reais, a API precisa autenticar e autorizar o acesso por turma.
+O perfil é derivado dos papéis mapeados em `VITE_ROLE_ADMIN` (`p07-admin`), `VITE_ROLE_PROFESSOR` (`p07-professor`) e `VITE_ROLE_ALUNO` (`p07-student`). A sessão OIDC utiliza o armazenamento de sessão padrão do `oidc-client-ts`, e a alternância manual entre perfis fica disponível somente no modo `demo`.
 
-Chamadas reais, validação de presença, matrículas do aluno e próxima aula dependem das rotas do backend. O fluxo de demonstração não é habilitado no modo Keycloak. A API deverá validar a expiração, a matrícula, a autorização do professor e a unicidade da presença por chamada. O contrato real das rotas, os papéis e o login institucional ainda precisam ser validados com o backend da equipe. A tela de frequência disponível nesta entrega funciona no modo de demonstração.
-
+No modo `keycloak`, o frontend consome a API NestJS (`integration.ts`, `useClasses.ts` e `useAttendance.ts`) com autenticação via Bearer JWT, isolamento por vínculo com a turma e atualização periódica a cada 5 segundos. Para subir o backend, o PostgreSQL e o Keycloak, siga o passo a passo na raiz em [`../README.md`](../README.md#inicio-rapido).
 ## Docker
 
 ```sh
