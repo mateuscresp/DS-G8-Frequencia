@@ -101,7 +101,7 @@ flowchart LR
 ### 1. Clonar o repositório
 
 ```bash
-git clone [https://github.com/mateuscresp/DS-G8-Frequencia.git](https://github.com/mateuscresp/DS-G8-Frequencia.git)
+git clone https://github.com/mateuscresp/DS-G8-Frequencia.git
 cd DS-G8-Frequencia
 ```
 
