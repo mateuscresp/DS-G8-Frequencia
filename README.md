@@ -83,11 +83,10 @@ flowchart LR
 ```
 
 ---
+<a id="inicio-rapido"></a> 
+## Início rápido
 
-<a id="inicio-rapido"></a>
-##  Início rápido
-
-> **Ambiente de execução:** **Node.js 22.12+** (validado em Node 24 LTS) e **npm**. O backend usa PostgreSQL e Keycloak, disponíveis via Docker Compose.
+> **Ambiente de execução:** **Node.js 22.12+** (validado em Node 24 LTS) e **npm**. O backend utiliza PostgreSQL 16 e Keycloak 25 via Docker Compose.
 
 ### Pré-requisitos
 
@@ -96,16 +95,22 @@ flowchart LR
 | **Node.js 22.12+** | O backend define `22` no `.nvmrc` |
 | **Git** | Para clonar o repositório |
 | **npm** | Gerenciador de pacotes |
-| **Docker** e **Docker Compose** | PostgreSQL e Keycloak, apenas no modo integrado |
+| **Docker** e **Docker Compose** | PostgreSQL e Keycloak (necessário apenas no modo integrado) |
 
-### 1️ª Clone o repositório
+---
+
+### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/mateuscresp/DS-G8-Frequencia.git
+git clone [https://github.com/mateuscresp/DS-G8-Frequencia.git](https://github.com/mateuscresp/DS-G8-Frequencia.git)
 cd DS-G8-Frequencia
 ```
 
-### 2ª Modo demonstração (mais rápido)
+---
+
+### 2. Modo demonstração (sem Docker, banco ou Keycloak)
+
+Ideal para validar a interface e o fluxo de chamada rapidamente com dados fictícios armazenados no navegador:
 
 ```bash
 cd p07-frontend
@@ -113,65 +118,151 @@ npm ci
 npm run dev
 ```
 
-Abra a URL exibida pelo Vite. Escolha **Professor**, selecione uma turma e gere um código. Use **Projetar** para mostrar o código em tela cheia. Em outra aba da mesma origem, abra `/aluno`, digite o código e volte à aba do professor para conferir o registro.
+1. Acesse a URL exibida pelo Vite (padrão: `http://localhost:5173`).
+2. Escolha **Professor**, selecione uma turma e abra uma chamada para gerar o código.
+3. Clique em **Projetar** para exibir o código em tela cheia.
+4. Em outra aba do mesmo navegador, acesse `http://localhost:5173/aluno`, informe o código e volte à aba do professor para conferir a presença registrada.
 
-> 💡 A demonstração usa **dados fictícios** e sincroniza pelo armazenamento local do navegador. Sem `.env`, o modo padrão é `demo`.
+> 💡 Sem arquivo `.env.local` (ou com `VITE_APP_MODE=demo`), o frontend opera 100% em modo demonstração.
 
-### 3ª Modo integrado (API + Keycloak)
+---
+
+### 3. Modo integrado (Frontend + Backend NestJS + PostgreSQL + Keycloak)
 
 <details>
 <summary><b>Ver passo a passo completo</b></summary>
 
 <br>
 
-**3.1 Infraestrutura (PostgreSQL e Keycloak):**
+#### 3.1 Subir PostgreSQL e Keycloak
+
+A partir da raiz do repositório (`DS-G8-Frequencia/`):
 
 ```bash
 cd backend
 docker compose up -d
 ```
 
-**3.2 Keycloak:** crie o realm `p07-frequencia`, os papéis `p07-admin`, `p07-professor` e `p07-student`, e um cliente público OIDC `p07-front` (Authorization Code + PKCE, com redirect URI e web origin do frontend). Configure o token para incluir `p07-back` em `aud`.
+Aguarde cerca de 20–30 segundos até o Keycloak finalizar a inicialização (`http://localhost:8080`).
+* **PostgreSQL:** `localhost:5433` (usuário `postgres`, senha `postgres`, banco `frequencia`)
+* **Keycloak Admin Console:** `http://localhost:8080` (usuário `admin`, senha `admin`)
 
->  **Nunca coloque segredo de cliente em variáveis `VITE_*`.**
+#### 3.2 Provisionar o Keycloak
 
-**3.3 Backend:**
+> O `docker-compose.yml` não importa o realm automaticamente. Configure uma única vez no console (`http://localhost:8080`):
+
+1. **Criar o Realm:** crie o realm `p07-frequencia` e selecione-o.
+2. **Criar os papéis (Realm Roles):** crie exatamente os três papéis:
+   * `p07-admin`
+   * `p07-professor`
+   * `p07-student`
+3. **Criar o cliente do frontend:** em **Clients → Create client**:
+   * **Client type:** `OpenID Connect`
+   * **Client ID:** `p07-front`
+   * **Client authentication:** `Off` (cliente público, Authorization Code + PKCE)
+   * **Valid redirect URIs:** `http://localhost:5173/*`
+   * **Web origins:** `http://localhost:5173`
+4. **Configurar a audiência (`aud`) esperada pelo backend (`p07-back`):**
+   * Abra o cliente `p07-front` → aba **Client scopes** → clique em `p07-front-dedicated`.
+   * Clique em **Add mapper → By configuration → Audience**.
+   * Defina um nome (ex.: `p07-back-audience`), preencha **Included Custom Audience** com `p07-back`, ative **Add to access token** (`On`) e salve.
+5. **Criar usuários de teste:** em **Users → Add user**, crie um usuário para professor e outro para aluno:
+   * Na aba **Credentials**, defina uma senha com **Temporary** desativado (`Off`).
+   * Na aba **Role mapping**, atribua `p07-professor` ou `p07-student`.
+   * Copie o **ID** (UUID / `sub`) de cada usuário criado — ele será usado no passo 3.4.
+
+> ⚠️ **Nunca coloque segredo de cliente em variáveis `VITE_*` do frontend.**
+
+#### 3.3 Configurar e iniciar o Backend
+
+Ainda dentro de `backend/`:
 
 ```bash
+# Linux / macOS / Git Bash
 cp .env.example .env
+
+# Windows (PowerShell)
+# Copy-Item .env.example .env
+```
+
+Os valores padrão do `.env.example` já correspondem ao Docker Compose (`porta 5433`, realm `p07-frequencia`, client `p07-back` e CORS `http://localhost:5173`). Em seguida, instale as dependências, aplique as migrations em banco novo e inicie a API:
+
+```bash
 npm ci
 npm run prisma:generate
-npm run migration:run     # em banco novo (veja MIGRATION-NOTES.md se o banco já existir)
-npm run db:seed           # cria apenas os status (não cria usuários nem turmas)
+npm run migration:run     # veja backend/MIGRATION-NOTES.md se usar banco já existente
+npm run db:seed           # popula apenas os status iniciais (CallStatus e AttendanceStatus)
 npm run dev
 ```
 
-**3.4 Vínculos acadêmicos:** cadastre os `sub` do Keycloak em `Teacher`/`Student` e os vínculos `ClassTeacher`/`Enrollment`.
+A API ficará disponível em `http://localhost:3000/frequencia/api` e a documentação Swagger em `http://localhost:3000/api/docs`.
 
-**3.5 Frontend em modo Keycloak:**
+#### 3.4 Cadastrar turmas e vínculos acadêmicos
+
+Como o `db:seed` cria apenas os status de chamada/presença, cadastre ao menos uma turma e vincule os `sub` (UUIDs) do Keycloak usando o Prisma Studio (em outro terminal, dentro de `backend/`):
 
 ```bash
-cd ../p07-frontend
+cd backend
+npx prisma studio
+```
+
+Pela interface web do Prisma Studio (`http://localhost:5555`), preencha nesta ordem:
+1. **`Teacher` e `Student`:** cadastre os usuários informando o UUID do Keycloak no campo `keycloakId`.
+2. **`Class`:** crie uma turma (ex.: código, nome e semestre).
+3. **`ClassTeacher` e `Enrollment`:** vincule o professor e os alunos à turma criada.
+
+#### 3.5 Configurar e iniciar o Frontend
+
+Em um novo terminal, a partir da raiz do repositório (`DS-G8-Frequencia/`):
+
+```bash
+cd p07-frontend
+npm ci
+
+# Linux / macOS / Git Bash
 cp .env.example .env.local
-# defina VITE_APP_MODE=keycloak e revise VITE_API_URL, VITE_KEYCLOAK_JSON e os papéis
+
+# Windows (PowerShell)
+# Copy-Item .env.example .env.local
+```
+
+Abra `p07-frontend/.env.local` e altere a primeira variável para ativar a autenticação via Keycloak:
+
+```env
+VITE_APP_MODE=keycloak
+```
+
+As demais variáveis (`VITE_API_URL`, `VITE_KEYCLOAK_JSON` e `VITE_ROLE_*`) já vêm pré-configuradas no `.env.example` para o ambiente local. Inicie o frontend:
+
+```bash
 npm run dev
 ```
+
+Acesse `http://localhost:5173` e faça login com os usuários criados no Keycloak.
 
 </details>
 
+---
+
 ### Variáveis de ambiente principais
 
-| Local | Variável | Descrição |
-|---|---|---|
-| `backend/.env` | `DATABASE_URL` | Conexão PostgreSQL (padrão: porta `5433`) |
-| `backend/.env` | `KEYCLOAK_AUTH_SERVER_URL`, `KEYCLOAK_REALM`, `KEYCLOAK_CLIENT_ID` | Validação do JWT (cliente esperado: `p07-back`) |
-| `backend/.env` | `CORS_ORIGINS` | Origens do frontend permitidas |
-| `backend/.env` | `API_PREFIX` | Prefixo da API (`frequencia/api`) |
-| `p07-frontend/.env.local` | `VITE_APP_MODE` | `demo` (padrão) ou `keycloak` |
-| `p07-frontend/.env.local` | `VITE_API_URL`, `VITE_KEYCLOAK_JSON` | API e configuração pública do cliente OIDC |
-| `p07-frontend/.env.local` | `VITE_ROLE_ADMIN`, `VITE_ROLE_PROFESSOR`, `VITE_ROLE_ALUNO` | Nomes dos papéis |
+| Local | Variável | Valor padrão (local) | Descrição |
+|---|---|---|---|
+| `backend/.env` | `DATABASE_URL` | `postgresql://postgres:postgres@localhost:5433/frequencia` | Conexão PostgreSQL |
+| `backend/.env` | `KEYCLOAK_AUTH_SERVER_URL` | `http://localhost:8080` | URL base do Keycloak |
+| `backend/.env` | `KEYCLOAK_REALM` / `KEYCLOAK_CLIENT_ID` | `p07-frequencia` / `p07-back` | Realm e audiência esperada no JWT |
+| `backend/.env` | `CORS_ORIGINS` | `http://localhost:5173` | Origens permitidas pelo CORS |
+| `backend/.env` | `API_PREFIX` | `frequencia/api` | Prefixo global das rotas HTTP |
+| `p07-frontend/.env.local` | `VITE_APP_MODE` | `demo` (alterar para `keycloak`) | Define modo demonstração ou API real |
+| `p07-frontend/.env.local` | `VITE_API_URL` | `http://localhost:3000/frequencia/api` | URL base do backend |
+| `p07-frontend/.env.local` | `VITE_KEYCLOAK_JSON` | `{"realm":"p07-frequencia",...}` | Configuração pública do cliente OIDC |
+| `p07-frontend/.env.local` | `VITE_ROLE_ADMIN` / `PROFESSOR` / `ALUNO` | `p07-admin` / `p07-professor` / `p07-student` | Papéis mapeados do token |
 
-### Docker (frontend)
+---
+
+### Docker (Frontend)
+
+A partir da raiz do repositório (`DS-G8-Frequencia/`):
 
 ```bash
 cd p07-frontend
@@ -179,29 +270,43 @@ docker build -t frequencia-front .
 docker run --rm -p 8081:80 frequencia-front
 ```
 
-A imagem serve a demonstração em `http://localhost:8081`. Para o modo integrado, informe `VITE_APP_MODE`, `VITE_API_URL` e `VITE_KEYCLOAK_JSON` como argumentos de build.
+A imagem serve o modo demonstração em `http://localhost:8081`. Para gerar a imagem em modo integrado, passe `--build-arg` com `VITE_APP_MODE=keycloak`, `VITE_API_URL` e `VITE_KEYCLOAK_JSON`.
+
+---
 
 ### Validação pós-execução
 
+A partir da raiz do repositório (`DS-G8-Frequencia/`):
+
 ```bash
-# Frontend
+# 1. Validar Frontend (tipagem, testes e build)
 cd p07-frontend
 npm run check && npm test && npm run build
 
-# Backend
+# 2. Validar Backend (lint, testes unitários e build)
 cd ../backend
 npm run lint:ci && npm test && npm run build
 ```
 
-**Testes HTTP de integração (backend):** crie um PostgreSQL **descartável** cujo nome contenha `_test`, aponte `DATABASE_URL` para ele, aplique as migrations e rode:
+#### Testes HTTP de integração (Backend)
+
+A suíte E2E exige um banco PostgreSQL **exclusivo e descartável** cujo nome contenha `_test`. Dentro de `backend/`, com o container `p07-postgres` em execução:
 
 ```bash
-npm run test:e2e
+# Criar banco descartável de teste
+docker exec -it p07-postgres createdb -U postgres frequencia_test
+
+# Linux / macOS / Git Bash
+DATABASE_URL="postgresql://postgres:postgres@localhost:5433/frequencia_test" npm run migration:run
+DATABASE_URL="postgresql://postgres:postgres@localhost:5433/frequencia_test" npm run test:e2e
+
+# Windows (PowerShell)
+# $env:DATABASE_URL="postgresql://postgres:postgres@localhost:5433/frequencia_test"
+# npm run migration:run
+# npm run test:e2e
 ```
 
- > **Nunca use um banco compartilhado.** A suíte cria fixtures próprias e as remove no final.
-
----
+> ⚠️ **Nunca aponte `test:e2e` para o banco principal (`frequencia`).** A suíte cria e remove fixtures próprias durante a execução.
 
 <a id="arquitetura"></a>
 ##  Arquitetura
