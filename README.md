@@ -133,7 +133,7 @@ npm run dev
 3. Clique em **Projetar** para exibir o código em tela cheia.
 4. Em outra aba do mesmo navegador, acesse `http://localhost:5173/aluno`, informe o código e volte à aba do professor para conferir a presença registrada.
 
-> 💡 Sem arquivo `.env.local` (ou com `VITE_APP_MODE=demo`), o frontend opera 100% em modo demonstração.
+>  Sem arquivo `.env.local` (ou com `VITE_APP_MODE=demo`), o frontend opera 100% em modo demonstração.
 
 ---
 
@@ -168,7 +168,7 @@ Após subir os containers (passo 1 de cada sistema abaixo), aguarde cerca de 20�
    * Na aba **Role mapping** (filtre por *Realm roles*), atribua `p07-professor` ou `p07-student`.
    * Copie o **ID** (UUID / `sub`) de cada usuário criado — ele será usado no Prisma Studio.
 
-> ⚠️ **Nunca coloque segredo de cliente em variáveis `VITE_*` do frontend.**
+>  **Nunca coloque segredo de cliente em variáveis `VITE_*` do frontend.**
 
 ---
 
@@ -301,7 +301,7 @@ A imagem serve o modo demonstração em `http://localhost:8081`. Para gerar a im
 
 ### Pipeline de validação e testes
 
-> ⚠️ **Nunca aponte `test:e2e` para o banco principal (`frequencia`).** A suíte exige um banco exclusivo com `_test` no nome e cria/remove fixtures próprias durante a execução.
+>  **Nunca aponte `test:e2e` para o banco principal (`frequencia`).** A suíte exige um banco exclusivo com `_test` no nome e cria/remove fixtures próprias durante a execução.
 
 #### Linux (Bash / Zsh — a partir da raiz `DS-G8-Frequencia/`)
 
